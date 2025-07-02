@@ -60,7 +60,7 @@ Apri il browser su http://localhost:3000
 
 - Aggiunta di stile personalizzato
 
-- Deploy su Vercel o Netlify
+- Deploy su Vercel (facoltativo)
 
 📄 Licenza
 Progetto open-source per scopi didattici. Nessuna licenza specifica.
