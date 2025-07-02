@@ -1,75 +1,69 @@
-# Nuxt Minimal Starter
+# 📝 Mini Blog - Nuxt 3
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Un progetto semplicissimo creato con [Nuxt 3](https://nuxt.com/) per apprendere le basi del framework. Mostra una lista di post finti e permette di visualizzarne i dettagli.
 
-## Setup
+## 🚀 Tecnologie usate
 
-Make sure to install dependencies:
+- [Nuxt 3](https://nuxt.com/)
+- [Vue 3](https://vuejs.org/)
+- Composition API
+- Routing automatico
+- API interne con `/server/api`
+- CSS base
+
+## 📁 Struttura del progetto
+
+mini-blog/
+│
+├── pages/ → Pagine e routing automatico
+│ ├── index.vue → Homepage con lista post
+│ └── posts/[id].vue → Dettaglio post
+│
+├── components/ → Componenti riutilizzabili
+│ └── PostCard.vue
+│
+├── server/api/ → API interne
+│ └── posts.ts
+│
+├── layouts/ → Layout generali
+│ └── default.vue
+│
+├── nuxt.config.ts → Configurazione progetto
+└── README.md → Questo file
+
+## 📦 Setup locale
 
 ```bash
-# npm
+# Clona la repo
+git clone https://github.com/<tuo-utente-GitHub>/mini-blog-nuxt3.git
+cd mini-blog-nuxt3
+
+# Installa le dipendenze
 npm install
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+# Avvia il server di sviluppo
 npm run dev
+Apri il browser su http://localhost:3000
 
-# pnpm
-pnpm dev
+✅ Task principali
+- Setup progetto con Nuxt 3
 
-# yarn
-yarn dev
+- Creazione API /api/posts con 3 post finti
 
-# bun
-bun run dev
+- Mostrare lista post nella homepage
+
+- Creazione componente PostCard.vue
+
+- Routing dinamico per pagina dettaglio
+
+- Layout base con header e footer
+
+- Aggiunta di stile personalizzato
+
+- Deploy su Vercel o Netlify
+
+📄 Licenza
+Progetto open-source per scopi didattici. Nessuna licenza specifica.
+
+✍️ Creato da Melania
 ```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
