@@ -1,14 +1,16 @@
-<!-- layouts/default.vue -->
 <template>
   <div>
     <header class="site-header">
-      <nav>
-        <NuxtLink to="/">Home</NuxtLink> |
-        <NuxtLink to="/products">Prodotti</NuxtLink>
-      </nav>
+      <div class="container header-content">
+        <h1 class="logo">Mini ASOS</h1>
+        <nav class="nav-links">
+          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/products">Prodotti</NuxtLink>
+        </nav>
+      </div>
     </header>
 
-    <main>
+    <main class="container">
       <NuxtPage />
     </main>
 
@@ -20,20 +22,51 @@
 
 <style scoped>
 .site-header {
-  padding: 1rem;
-  background: #222;
-  color: white;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-.site-header a {
-  color: white;
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.nav-links {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  font-weight: 500;
   text-decoration: none;
-  margin-right: 1rem;
+  color: #1a1a1a;
 }
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
 .site-footer {
-  margin-top: 2rem;
-  padding: 1rem;
-  background: #eee;
+  margin-top: 3rem;
+  padding: 2rem 0;
   text-align: center;
   font-size: 0.9rem;
+  color: #666;
 }
 </style>
