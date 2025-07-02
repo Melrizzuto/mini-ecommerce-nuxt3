@@ -57,9 +57,8 @@ const { data: products } = await useFetch<Product[]>("/api/products");
 
 .product-image {
   width: 100%;
-  height: 250px;
+  height: 320px;
   object-fit: cover;
-  margin-bottom: 1rem;
   border-radius: 8px;
 }
 
