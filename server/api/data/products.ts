@@ -1,5 +1,6 @@
+import type { Product } from "../../types/Product";
 // server/data/products.ts
-export default [
+export const products: Product[] = [
   {
     id: 1,
     name: "T-shirt nera",

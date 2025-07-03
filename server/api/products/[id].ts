@@ -1,4 +1,4 @@
-import products from "../data/products";
+import { products } from "@/server/api/data/products";
 
 export default defineEventHandler((event) => {
   const id = Number(event.context.params?.id);

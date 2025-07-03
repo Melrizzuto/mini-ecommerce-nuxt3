@@ -1,21 +1,22 @@
 <script setup lang="ts">
+/* importo il tipo Product dalla cartella types */
+import type { Product } from "@/server/types/Product";
+
+/* definisco che questo componente riceve una prop chiamata "product" di tipo Product */
 defineProps<{
-  product: {
-    id: number;
-    name: string;
-    price: number;
-    description: string;
-    image: string;
-  };
+  product: Product;
 }>();
 </script>
 
 <template>
   <li class="product-card">
+    <!-- link alla pagina del prodotto -->
     <NuxtLink :to="`/products/${product.id}`">
       <h2>{{ product.name }}</h2>
     </NuxtLink>
+
     <p>{{ product.description }}</p>
+
     <p>
       <strong>{{ product.price }} €</strong>
     </p>
