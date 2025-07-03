@@ -1,15 +1,3 @@
-<template>
-  <li class="product-card">
-    <NuxtLink :to="`/products/${product.id}`">
-      <h2>{{ product.name }}</h2>
-    </NuxtLink>
-    <p>{{ product.description }}</p>
-    <p>
-      <strong>{{ product.price }} €</strong>
-    </p>
-  </li>
-</template>
-
 <script setup lang="ts">
 defineProps<{
   product: {
@@ -21,6 +9,18 @@ defineProps<{
   };
 }>();
 </script>
+
+<template>
+  <li class="product-card">
+    <NuxtLink :to="`/products/${product.id}`">
+      <h2>{{ product.name }}</h2>
+    </NuxtLink>
+    <p>{{ product.description }}</p>
+    <p>
+      <strong>{{ product.price }} €</strong>
+    </p>
+  </li>
+</template>
 
 <style scoped>
 .product-card {
