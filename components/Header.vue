@@ -4,8 +4,8 @@
       <h1 class="logo">Mini ASOS</h1>
       <nav class="nav-links">
         <NuxtLink to="/">Home</NuxtLink>
-        <NuxtLink to="/products">Prodotti</NuxtLink>
-        <NuxtLink to="/about">Chi Siamo</NuxtLink>
+        <NuxtLink to="/products">Products</NuxtLink>
+        <NuxtLink to="/about">About Us</NuxtLink>
       </nav>
     </div>
   </header>

@@ -3,23 +3,23 @@ import type { Product } from "../../types/Product";
 export const products: Product[] = [
   {
     id: 1,
-    name: "T-shirt nera",
+    name: "Black T-shirt",
     price: 19.99,
-    description: "T-shirt 100% cotone, taglio unisex",
+    description: "100% cotton unisex T-shirt",
     image: "/images/t-shirt.png",
   },
   {
     id: 2,
-    name: "Felpa oversize",
+    name: "Oversized Hoodie",
     price: 39.99,
-    description: "Felpa con cappuccio, disponibile in varie taglie",
+    description: "Hooded sweatshirt available in multiple sizes",
     image: "/images/felpa.png",
   },
   {
     id: 3,
-    name: "Cappellino beige",
+    name: "Beige Cap",
     price: 14.99,
-    description: "Cappellino regolabile con visiera curva",
+    description: "Adjustable cap with curved visor",
     image: "/images/cappellino.png",
   },
 ];

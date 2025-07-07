@@ -1,6 +1,6 @@
 <template>
   <footer class="site-footer">
-    <p>&copy; 2025 mini ecommerce - tutti i diritti riservati.</p>
+    <p>&copy; 2025 Mini E-commerce — All rights reserved.</p>
   </footer>
 </template>
 
