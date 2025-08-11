@@ -297,10 +297,10 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
     background: transparent; /* scompare la barra centrale */
   }
   .hamburger span.open::before {
-    transform: rotate(45deg) translate(3px, 3px);
+    transform: rotate(40deg) translate(3px, 3px);
   }
   .hamburger span.open::after {
-    transform: rotate(-45deg) translate(3px, -3px);
+    transform: rotate(-40deg) translate(6px, -6px);
   }
 }
 </style>
