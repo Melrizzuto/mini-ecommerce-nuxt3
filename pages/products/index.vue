@@ -27,7 +27,7 @@ const { data: products } = await useFetch<Product[]>("/api/products");
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 2rem;
+  gap: 3rem;
   margin-top: 2rem;
 }
 </style>

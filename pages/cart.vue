@@ -7,8 +7,7 @@ const formatPrice = (n: number) => `${n.toFixed(2)} €`;
 const dec = (id: number) => {
   const it = cart.items.find((i) => i.product.id === id);
   if (!it) return;
-  const next = Math.max(1, it.qty - 1);
-  cart.setQty(id, next);
+  cart.setQty(id, Math.max(1, it.qty - 1));
 };
 const inc = (id: number) => {
   const it = cart.items.find((i) => i.product.id === id);
@@ -19,37 +18,35 @@ const inc = (id: number) => {
 
 <template>
   <section class="cart">
-    <h1>Carrello ({{ cart.count }} articoli)</h1>
+    <h1>Cart ({{ cart.count }} items)</h1>
 
-    <div v-if="!cart.items.length" class="empty">Il carrello è vuoto.</div>
+    <div v-if="!cart.items.length" class="empty">Your cart is empty.</div>
 
     <div v-else class="list">
       <article v-for="it in cart.items" :key="it.product.id" class="row">
-        <img
-          class="thumb"
-          :src="it.product.image"
-          :alt="it.product.title || it.product.title"
-        />
+        <img class="thumb" :src="it.product.image" :alt="it.product.title" />
 
         <div class="info">
-          <h3 class="title">{{ it.product.title || it.product.title }}</h3>
+          <h3 class="title">{{ it.product.title }}</h3>
           <div class="meta">
-            <span v-if="it.product.category" class="chip">{{
-              it.product.category
-            }}</span>
-            <span v-if="it.product.rating?.rate" class="rating"
-              >★ {{ it.product.rating.rate }} ({{
-                it.product.rating.count
-              }})</span
-            >
+            <span v-if="it.product.category" class="chip">
+              {{ it.product.category }}
+            </span>
+            <span v-if="it.product.rating?.rate" class="rating">
+              ★ {{ it.product.rating.rate }} ({{ it.product.rating.count }})
+            </span>
           </div>
+
           <p v-if="it.product.description" class="desc">
             {{ it.product.description }}
           </p>
 
           <div class="controls">
             <div class="qty">
-              <button @click="dec(it.product.id)" aria-label="Diminuisci">
+              <button
+                @click="dec(it.product.id)"
+                aria-label="Decrease quantity"
+              >
                 −
               </button>
               <input
@@ -65,24 +62,26 @@ const inc = (id: number) => {
                     )
                   )
                 "
+                aria-label="Quantity"
               />
-              <button @click="inc(it.product.id)" aria-label="Aumenta">
+              <button
+                @click="inc(it.product.id)"
+                aria-label="Increase quantity"
+              >
                 +
               </button>
             </div>
 
             <div class="prices">
               <span class="price">{{ formatPrice(it.product.price) }}</span>
-              <span class="subtotal"
-                >Subtotale:
-                <strong>{{
-                  formatPrice(it.product.price * it.qty)
-                }}</strong></span
-              >
+              <span class="subtotal">
+                Subtotal:
+                <strong>{{ formatPrice(it.product.price * it.qty) }}</strong>
+              </span>
             </div>
 
             <button class="remove" @click="cart.remove(it.product.id)">
-              Rimuovi
+              Remove
             </button>
           </div>
         </div>
@@ -90,15 +89,16 @@ const inc = (id: number) => {
 
       <div class="total">
         <div class="sum">
-          Totale: <strong>{{ formatPrice(cart.total) }}</strong>
+          Total: <strong>{{ formatPrice(cart.total) }}</strong>
         </div>
-        <button class="clear" @click="cart.clear()">Svuota carrello</button>
+        <button class="clear" @click="cart.clear()">Clear cart</button>
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
+/* keep your existing CSS as-is */
 .cart {
   max-width: 1000px;
   margin: 2rem auto;

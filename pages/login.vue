@@ -8,7 +8,7 @@ const onLogin = async () => {
     await login(username.value, password.value);
     await navigateTo("/products");
   } catch (e: any) {
-    alert(e?.data?.statusMessage || "Login fallito");
+    alert(e?.data?.statusMessage || "Login failed");
   }
 };
 </script>
@@ -20,21 +20,21 @@ const onLogin = async () => {
     <form v-if="!isAuthenticated" @submit.prevent="onLogin" class="form">
       <input
         v-model="username"
-        placeholder="username"
+        placeholder="Username"
         autocomplete="username"
       />
       <input
         v-model="password"
         type="password"
-        placeholder="password"
+        placeholder="Password"
         autocomplete="current-password"
       />
-      <button type="submit">Entra</button>
+      <button type="submit">Sign in</button>
     </form>
 
     <div v-else class="ok">
-      <p>Sei loggato.</p>
-      <NuxtLink to="/products">Vai ai prodotti →</NuxtLink>
+      <p>You are logged in.</p>
+      <NuxtLink to="/products">Go to products →</NuxtLink>
       <button @click="logout">Logout</button>
     </div>
   </section>
@@ -62,6 +62,14 @@ button {
   border: 1px solid #000;
   background: #000;
   color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+button:hover {
+  background: #333;
+}
+button:active {
+  transform: scale(0.98);
 }
 .ok {
   display: grid;
