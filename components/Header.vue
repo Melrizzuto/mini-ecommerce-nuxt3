@@ -4,35 +4,86 @@ import { storeToRefs } from "pinia";
 import { useAuth } from "@/composables/useAuth";
 import ThemeToggle from "@/components/ThemeToggle.vue";
 
-const colorMode = useColorMode();
+const { isAuthenticated, logout } = useAuth();
+const cart = useCartStore();
+const { count } = storeToRefs(cart);
 
+const colorMode = useColorMode();
 const toggleTheme = () => {
   colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
 };
-const { isAuthenticated, logout } = useAuth();
 
-const cart = useCartStore();
-const { count } = storeToRefs(cart); // reattivo e type-safe
+// stato per aprire/chiudere il menu mobile
+const isMenuOpen = ref(false);
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+  document.body.style.overflow = isMenuOpen.value ? "hidden" : "";
+};
+
+const closeMenu = () => {
+  isMenuOpen.value = false;
+  document.body.style.overflow = "";
+};
+
+// chiusura con click fuori
+const onClickOutside = (e: MouseEvent) => {
+  const nav = document.querySelector(".nav-links");
+  const btn = document.querySelector(".hamburger");
+  if (
+    isMenuOpen.value &&
+    nav &&
+    btn &&
+    !nav.contains(e.target as Node) &&
+    !btn.contains(e.target as Node)
+  ) {
+    closeMenu();
+  }
+};
+onMounted(() => document.addEventListener("click", onClickOutside));
+onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
 </script>
 
 <template>
   <header class="site-header">
     <div class="container header-content">
+      <!-- Logo -->
       <NuxtLink to="/" class="logo-link">
         <h1 class="logo">Mini ASOS</h1>
       </NuxtLink>
-      <nav class="nav-links">
-        <NuxtLink to="/">Home</NuxtLink>
-        <NuxtLink to="/products">Products</NuxtLink>
-        <NuxtLink to="/about">About Us</NuxtLink>
-        <NuxtLink v-if="!isAuthenticated" to="/login">Login</NuxtLink>
-        <button v-else class="linklike" @click="logout">Logout</button>
 
-        <NuxtLink to="/cart" class="cart-link">
+      <!-- Bottone hamburger mobile -->
+      <button class="hamburger" @click="toggleMenu" aria-label="Toggle menu">
+        <span :class="{ open: isMenuOpen }"></span>
+      </button>
+
+      <!-- Menu -->
+      <nav :class="['nav-links', { open: isMenuOpen }]">
+        <NuxtLink to="/" @click="closeMenu">Home</NuxtLink>
+        <NuxtLink to="/products" @click="closeMenu">Products</NuxtLink>
+        <NuxtLink to="/about" @click="closeMenu">About Us</NuxtLink>
+        <NuxtLink v-if="!isAuthenticated" to="/login" @click="closeMenu"
+          >Login</NuxtLink
+        >
+        <button
+          v-else
+          class="linklike"
+          @click="
+            () => {
+              logout();
+              closeMenu();
+            }
+          "
+        >
+          Logout
+        </button>
+
+        <NuxtLink to="/cart" class="cart-link" @click="closeMenu">
           🛒
           <span v-if="count" class="badge">{{ count }}</span>
           <span class="sr-only">Go to cart</span>
         </NuxtLink>
+
         <ThemeToggle />
       </nav>
     </div>
@@ -43,7 +94,6 @@ const { count } = storeToRefs(cart); // reattivo e type-safe
 .site-header {
   background: var(--bg);
   border-bottom: 1px solid var(--border);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .container {
@@ -67,60 +117,70 @@ const { count } = storeToRefs(cart); // reattivo e type-safe
   text-decoration: none;
   color: var(--text);
 }
+
 .logo-link:hover .logo {
   text-decoration: underline;
   text-underline-offset: 2px;
-  text-decoration-thickness: 2px;
 }
 
+/* Hamburger animato */
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 30px;
+  height: 20px;
+  position: relative;
+}
+
+.hamburger span,
+.hamburger span::before,
+.hamburger span::after {
+  display: block;
+  background: var(--text);
+  height: 3px;
+  width: 100%;
+  border-radius: 3px;
+  position: absolute;
+  transition: 0.3s ease;
+}
+
+.hamburger span::before {
+  content: "";
+  top: -8px;
+}
+
+.hamburger span::after {
+  content: "";
+  top: 8px;
+}
+
+.hamburger span.open {
+  background: transparent;
+}
+
+.hamburger span.open::before {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger span.open::after {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Menu desktop */
 .nav-links {
   display: flex;
   gap: 1.5rem;
   align-items: center;
-}
-
-/* Toggle tema: più coerente con il dark */
-.theme-toggle {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  cursor: pointer;
-  color: var(--text);
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
-    transform 0.1s;
-}
-.theme-toggle:hover {
-  background: var(--surface);
-}
-.theme-toggle:active {
-  transform: scale(0.98);
+  transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .nav-links a,
 .linklike,
 .cart-link {
-  font-weight: 500;
   text-decoration: none;
   color: var(--text);
-  transition: color 0.2s ease;
-}
-.nav-links a:hover {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  text-decoration-thickness: 2px;
-}
-
-.linklike {
-  background: none;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-}
-
-.cart-link {
-  position: relative;
-  font-size: 1.2rem;
 }
 
 .badge {
@@ -130,26 +190,39 @@ const { count } = storeToRefs(cart); // reattivo e type-safe
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
-  background: #111; /* piccolo badge: resta scuro per contrasto */
+  background: #111;
   color: #fff;
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
-  line-height: 1;
-  font-weight: 700;
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+/* Mobile */
+@media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: var(--bg);
+    flex-direction: column;
+    height: 100%;
+    width: 220px;
+    padding: 80px 20px;
+    gap: 1.5rem;
+    transform: translateX(100%);
+    opacity: 0;
+    z-index: 100;
+  }
+
+  .nav-links.open {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 </style>
