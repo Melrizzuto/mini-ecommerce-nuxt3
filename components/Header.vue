@@ -3,10 +3,12 @@ import { useCartStore } from "@/stores/cart";
 import { storeToRefs } from "pinia";
 import { useAuth } from "@/composables/useAuth";
 import ThemeToggle from "@/components/ThemeToggle.vue";
+import { useWishlistStore } from "@/stores/wishlist";
 
 const { isAuthenticated, logout } = useAuth();
 const cart = useCartStore();
 const { count } = storeToRefs(cart);
+const wishlist = useWishlistStore();
 
 const colorMode = useColorMode();
 const toggleTheme = () => {
@@ -81,9 +83,12 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
             Logout
           </button>
           <NuxtLink to="/cart" class="cart-link" @click="closeMenu">
-            🛒
+            Go to cart
             <span v-if="count" class="badge">{{ count }}</span>
           </NuxtLink>
+          <div class="wishlist-icon" style="position: relative">
+            <NuxtLink to="/wishlist"> Wishlist </NuxtLink>
+          </div>
         </template>
 
         <ThemeToggle />
@@ -222,6 +227,26 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
   font-size: 0.75rem;
   line-height: 1;
   font-weight: 700;
+}
+/* Bottone wishlist */
+.wishlist-link {
+  position: relative;
+}
+
+.icon-heart {
+  width: 24px;
+  height: 24px;
+}
+
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--accent);
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 5px;
+  border-radius: 50%;
 }
 /* Bottone Logout stile link elegante */
 .btn-logout {

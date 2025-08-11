@@ -382,13 +382,18 @@ const featured = computed(() => products.value.slice(0, 8));
   .grid {
     grid-template-columns: repeat(2, 1fr);
   }
+  .cat-card {
+    height: 72px;
+  }
 }
 @media (max-width: 520px) {
   .grid {
     grid-template-columns: 1fr;
   }
+  .cat-card {
+    height: 72px;
+  }
 }
-
 /* ===== BUTTONS (ASOS) — no underline ever ===== */
 .btn-asos,
 .btn-asos-outline {
