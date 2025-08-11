@@ -52,3 +52,22 @@ pnpm install
 
 # Avvia il server di sviluppo
 pnpm run dev
+
+Apri il browser su http://localhost:3000
+
+⸻
+```
+## ✅ Task completate
+	•	Setup progetto con Nuxt 3 + TypeScript
+	•	Configurazione Pinia e storeToRefs
+	•	Routing protetto e autenticazione
+	•	Integrazione API prodotti e login
+	•	Filtri dinamici con query params
+	•	Dark mode e ottimizzazione UI/UX
+	•	Deploy su Vercel con variabili d’ambiente
+
+⸻
+
+## 📄 Licenza
+
+Progetto open-source per scopi didattici.
