@@ -1,23 +1,33 @@
 <script setup lang="ts">
 import type { Product } from "@/server/types/Product";
+import { useCartStore } from "@/stores/cart";
 
 // definisco la prop che ricevo dal componente padre, è un oggetto di tipo Product
 defineProps<{
   product: Product;
 }>();
+
+const cart = useCartStore();
+
+const addToCart = (product: Product) => {
+  cart.add(product, 1);
+};
 </script>
 
 <template>
   <!-- creo un link che porta alla pagina di dettaglio del prodotto -->
   <NuxtLink :to="`/products/${product.id}`" class="product-card">
     <!-- mostro l'immagine del prodotto -->
-    <img :src="product.image" :alt="product.name" class="product-image" />
+    <img :src="product.image" :alt="product.title" class="product-image" />
 
     <!-- mostro nome e prezzo del prodotto -->
     <div class="card-info">
-      <h2>{{ product.name }}</h2>
+      <h2>{{ product.title }}</h2>
       <p class="price">{{ product.price }} €</p>
     </div>
+    <button @click.stop.prevent="addToCart(product)">
+      Aggiungi al carrello
+    </button>
   </NuxtLink>
 </template>
 
