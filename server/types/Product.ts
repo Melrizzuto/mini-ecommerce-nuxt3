@@ -1,8 +1,8 @@
-// types/Product.ts
-export interface Product {
+export type Product = {
   id: number;
-  name: string;
+  title: string;
   price: number;
-  description: string;
   image: string;
-}
+  description?: string;
+  category?: string;
+};
