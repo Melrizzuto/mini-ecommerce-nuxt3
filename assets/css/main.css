@@ -26,6 +26,8 @@ img {
   --btn-bd: #111111;
   --btn-bg-hover: #ffffff;
   --btn-fg-hover: #111111;
+  --badge-bg: #111;
+  --badge-text: #fff;
 }
 
 /* DARK */
@@ -45,6 +47,8 @@ html.dark {
   --btn-bd: #f3f4f6;
   --btn-bg-hover: transparent;
   --btn-fg-hover: #f3f4f6;
+  --badge-bg: #fff;
+  --badge-text: #111;
 }
 
 html {
@@ -79,4 +83,25 @@ body {
 .btn:hover {
   background: var(--btn-bg-hover);
   color: var(--btn-fg-hover);
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* sopra al contenuto della pagina */
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0;
+}
+
+/* ombra quando la pagina è scrollata */
+.site-header.scrolled {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  backdrop-filter: saturate(120%) blur(6px); /* opzionale, bello con temi translucidi */
+}
+
+/* assicura che il drawer mobile sia sopra agli altri elementi del header */
+@media (max-width: 768px) {
+  .nav-links {
+    z-index: 1001;
+  }
 }

@@ -1,19 +1,14 @@
 <script setup lang="ts">
 import { useCartStore } from "@/stores/cart";
+import { useWishlistStore } from "@/stores/wishlist";
 import { storeToRefs } from "pinia";
 import { useAuth } from "@/composables/useAuth";
 import ThemeToggle from "@/components/ThemeToggle.vue";
-import { useWishlistStore } from "@/stores/wishlist";
 
 const { isAuthenticated, logout } = useAuth();
 const cart = useCartStore();
-const { count } = storeToRefs(cart);
+const { count: cartCount } = storeToRefs(cart);
 const wishlist = useWishlistStore();
-
-const colorMode = useColorMode();
-const toggleTheme = () => {
-  colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
-};
 
 const isMenuOpen = ref(false);
 
@@ -21,7 +16,6 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
   document.body.style.overflow = isMenuOpen.value ? "hidden" : "";
 };
-
 const closeMenu = () => {
   isMenuOpen.value = false;
   document.body.style.overflow = "";
@@ -52,249 +46,245 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
         <h1 class="logo">Mini ASOS</h1>
       </NuxtLink>
 
-      <!-- Hamburger -->
-      <button class="hamburger" @click="toggleMenu" aria-label="Toggle menu">
-        <span :class="{ open: isMenuOpen }"></span>
-      </button>
-
-      <!-- Menu -->
-      <nav :class="['nav-links', { open: isMenuOpen }]">
+      <!-- Menu Links -->
+      <nav
+        class="nav-links"
+        :class="{ open: isMenuOpen }"
+        aria-label="Primary"
+        :aria-hidden="!isMenuOpen"
+      >
         <NuxtLink to="/" @click="closeMenu">Home</NuxtLink>
         <NuxtLink to="/products" @click="closeMenu">Products</NuxtLink>
         <NuxtLink to="/about" @click="closeMenu">About Us</NuxtLink>
 
-        <!-- Se NON loggato -->
-        <template v-if="!isAuthenticated">
-          <NuxtLink to="/register" @click="closeMenu">Register</NuxtLink>
-          <NuxtLink to="/login" @click="closeMenu">Login</NuxtLink>
-        </template>
-
-        <!-- Se loggato -->
-        <template v-else>
-          <button
-            class="linklike btn-logout"
-            @click="
-              () => {
-                logout();
-                closeMenu();
-              }
-            "
-          >
-            Logout
-          </button>
-          <NuxtLink to="/cart" class="cart-link" @click="closeMenu">
-            Go to cart
-            <span v-if="count" class="badge">{{ count }}</span>
-          </NuxtLink>
-          <div class="wishlist-icon" style="position: relative">
-            <NuxtLink to="/wishlist"> Wishlist </NuxtLink>
-          </div>
-        </template>
-
-        <ThemeToggle />
+        <!-- Auth in mobile menu -->
+        <div class="auth-mobile">
+          <template v-if="!isAuthenticated">
+            <NuxtLink to="/login" class="auth-link" @click="closeMenu"
+              >Login</NuxtLink
+            >
+            <NuxtLink to="/register" class="auth-link" @click="closeMenu"
+              >Register</NuxtLink
+            >
+          </template>
+          <template v-else>
+            <button
+              class="auth-link"
+              @click="
+                () => {
+                  logout();
+                  closeMenu();
+                }
+              "
+            >
+              Logout
+            </button>
+          </template>
+        </div>
       </nav>
+
+      <!-- Actions -->
+      <div class="actions">
+        <!-- Wishlist -->
+        <NuxtLink to="/wishlist" class="icon-link" aria-label="Wishlist">
+          ❤️
+          <span v-if="wishlist.count" class="badge">{{ wishlist.count }}</span>
+        </NuxtLink>
+
+        <!-- Cart -->
+        <NuxtLink to="/cart" class="icon-link" aria-label="Cart">
+          🛒
+          <span v-if="cartCount" class="badge">{{ cartCount }}</span>
+        </NuxtLink>
+
+        <!-- Theme toggle -->
+        <ThemeToggle />
+
+        <!-- Auth (desktop only) -->
+        <div class="auth-desktop">
+          <template v-if="!isAuthenticated">
+            <NuxtLink to="/login" class="auth-link">Login</NuxtLink>
+            <NuxtLink to="/register" class="auth-link">Register</NuxtLink>
+          </template>
+          <template v-else>
+            <button class="auth-link" @click="logout">Logout</button>
+          </template>
+        </div>
+
+        <!-- Hamburger -->
+        <button
+          class="hamburger"
+          @click="toggleMenu"
+          :aria-expanded="isMenuOpen"
+          aria-controls="primary-menu"
+          aria-label="Toggle menu"
+        >
+          <span :class="{ open: isMenuOpen }"></span>
+        </button>
+      </div>
     </div>
   </header>
 </template>
 
 <style scoped>
+/* --- Header Base --- */
 .site-header {
   background: var(--bg);
   border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0;
 }
-
 .container {
   margin: 0 auto;
   padding: 0 1.5rem;
-}
-
-.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
   color: var(--text);
 }
-
 .logo-link {
   text-decoration: none;
-  color: var(--text);
+  color: inherit;
 }
 
-.logo-link:hover .logo {
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-
-/* Hamburger animato */
-.hamburger {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  width: 30px;
-  height: 20px;
-  position: relative;
-}
-
-.hamburger span,
-.hamburger span::before,
-.hamburger span::after {
-  display: block;
-  background: var(--text);
-  height: 3px;
-  width: 100%;
-  border-radius: 3px;
-  position: absolute;
-  transition: 0.3s ease;
-}
-
-.hamburger span::before {
-  content: "";
-  top: -8px;
-}
-
-.hamburger span::after {
-  content: "";
-  top: 8px;
-}
-
-.hamburger span.open {
-  background: transparent;
-}
-
-.hamburger span.open::before {
-  transform: rotate(45deg) translate(5px, 5px);
-}
-
-.hamburger span.open::after {
-  transform: rotate(-45deg) translate(5px, -5px);
-}
-
-/* Menu desktop */
+/* --- Nav Desktop --- */
 .nav-links {
   display: flex;
   gap: 1.5rem;
-  align-items: center;
-  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.nav-links a {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 500;
 }
 
-.nav-links a,
-.linklike,
-.cart-link {
+/* --- Actions --- */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.icon-link {
+  position: relative;
+  font-size: 1.2rem;
   text-decoration: none;
   color: var(--text);
 }
-
 .badge {
   position: absolute;
   top: -6px;
-  right: -10px;
+  right: -8px;
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
-  background: #111;
-  color: #fff;
+  background: var(--text);
+  color: var(--bg);
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
+  font-weight: bold;
 }
-.cart-link {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-}
-
-.cart-link .badge {
-  position: absolute;
-  top: -6px;
-  right: -10px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  background: #111;
-  color: #fff;
-  border-radius: 999px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  line-height: 1;
-  font-weight: 700;
-}
-/* Bottone wishlist */
-.wishlist-link {
-  position: relative;
-}
-
-.icon-heart {
-  width: 24px;
-  height: 24px;
-}
-
-.badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
-  background: var(--accent);
-  color: white;
-  font-size: 0.75rem;
-  padding: 2px 5px;
-  border-radius: 50%;
-}
-/* Bottone Logout stile link elegante */
-.btn-logout {
-  background: transparent;
+.auth-link {
+  font-size: 0.9rem;
+  color: var(--text);
+  background: none;
   border: none;
-  color: var(--muted);
-  font-weight: 500;
-  font-size: 0.95rem;
   cursor: pointer;
-  padding: 0.4rem 0.6rem;
-  border-radius: 6px;
-  transition: color 0.2s ease, background-color 0.2s ease;
 }
 
-.btn-logout:hover {
-  color: var(--btn-fg-hover);
-  background-color: var(--surface);
+/* show on desktop, hide on mobile */
+.auth-desktop {
+  display: flex;
+  gap: 0.75rem;
 }
 
-.btn-logout:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px var(--btn-bd);
+/* hidden by default (desktop), shown on mobile */
+.auth-mobile {
+  display: none;
 }
 
-/* Mobile */
+/* --- Mobile Styles --- */
+.hamburger {
+  display: none;
+}
 @media (max-width: 768px) {
-  .hamburger {
-    display: block;
-  }
-
+  /* Menu Off-Canvas */
   .nav-links {
     position: fixed;
     top: 0;
     right: 0;
+    height: 100vh;
+    width: 70%;
     background: var(--bg);
     flex-direction: column;
-    height: 100%;
-    width: 220px;
-    padding: 80px 20px;
-    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 5rem 2rem 2rem;
+    gap: 1.25rem;
     transform: translateX(100%);
-    opacity: 0;
-    z-index: 100;
+    transition: transform 0.3s ease-in-out;
+    z-index: 999;
   }
-
   .nav-links.open {
     transform: translateX(0);
-    opacity: 1;
+  }
+
+  /* Auth inside drawer */
+  .auth-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Hide desktop auth on mobile */
+  .auth-desktop {
+    display: none;
+  }
+
+  /* Hamburger Button */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  .hamburger span,
+  .hamburger span::before,
+  .hamburger span::after {
+    content: "";
+    display: block;
+    height: 3px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+  }
+  .hamburger span::before {
+    transform: translateY(-6px);
+  }
+  .hamburger span::after {
+    transform: translateY(3px);
+  }
+  .hamburger span.open {
+    background: transparent;
+  }
+  .hamburger span.open::before {
+    transform: rotate(45deg) translate(4px, 4px);
+  }
+  .hamburger span.open::after {
+    transform: rotate(-45deg) translate(4px, -4px);
   }
 }
 </style>

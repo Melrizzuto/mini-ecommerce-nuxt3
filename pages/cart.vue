@@ -269,7 +269,6 @@ const goToCheckout = () => {
 
 .btn.remove {
   background: var(--btn-bg);
-  color: #fff;
 }
 .btn.remove:hover {
   background: #ff4d4d;
