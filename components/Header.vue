@@ -239,7 +239,6 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
     flex-direction: column;
     gap: 1rem;
     width: 100%;
-    margin-top: auto;
     padding-top: 1.5rem;
     border-top: 1px solid var(--border);
   }
