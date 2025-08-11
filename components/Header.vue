@@ -13,7 +13,6 @@ const toggleTheme = () => {
   colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
 };
 
-// stato per aprire/chiudere il menu mobile
 const isMenuOpen = ref(false);
 
 const toggleMenu = () => {
@@ -26,7 +25,6 @@ const closeMenu = () => {
   document.body.style.overflow = "";
 };
 
-// chiusura con click fuori
 const onClickOutside = (e: MouseEvent) => {
   const nav = document.querySelector(".nav-links");
   const btn = document.querySelector(".hamburger");
@@ -52,7 +50,7 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
         <h1 class="logo">Mini ASOS</h1>
       </NuxtLink>
 
-      <!-- Bottone hamburger mobile -->
+      <!-- Hamburger -->
       <button class="hamburger" @click="toggleMenu" aria-label="Toggle menu">
         <span :class="{ open: isMenuOpen }"></span>
       </button>
@@ -62,26 +60,32 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
         <NuxtLink to="/" @click="closeMenu">Home</NuxtLink>
         <NuxtLink to="/products" @click="closeMenu">Products</NuxtLink>
         <NuxtLink to="/about" @click="closeMenu">About Us</NuxtLink>
-        <NuxtLink v-if="!isAuthenticated" to="/login" @click="closeMenu"
-          >Login</NuxtLink
-        >
-        <button
-          v-else
-          class="linklike"
-          @click="
-            () => {
-              logout();
-              closeMenu();
-            }
-          "
-        >
-          Logout
-        </button>
 
-        <NuxtLink to="/cart" class="cart-link" @click="closeMenu">
-          🛒
-          <span v-if="count" class="badge">{{ count }}</span>
-        </NuxtLink>
+        <!-- Se NON loggato -->
+        <template v-if="!isAuthenticated">
+          <NuxtLink to="/register" @click="closeMenu">Register</NuxtLink>
+          <NuxtLink to="/login" @click="closeMenu">Login</NuxtLink>
+        </template>
+
+        <!-- Se loggato -->
+        <template v-else>
+          <button
+            class="linklike"
+            @click="
+              () => {
+                logout();
+                closeMenu();
+              }
+            "
+          >
+            Logout
+          </button>
+          <NuxtLink to="/cart" class="cart-link" @click="closeMenu">
+            🛒
+            <span v-if="count" class="badge">{{ count }}</span>
+          </NuxtLink>
+        </template>
+
         <ThemeToggle />
       </nav>
     </div>
