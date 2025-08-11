@@ -250,41 +250,57 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
   }
 
   /* Hamburger Button */
+  /* Hamburger Button */
   .hamburger {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    width: 24px;
-    height: 18px;
+    justify-content: center; /* centra verticalmente */
+    align-items: center; /* centra orizzontalmente */
+    width: 32px; /* area clic un po’ più grande */
+    height: 32px;
     background: none;
     border: none;
     cursor: pointer;
     z-index: 1000;
+    padding: 0;
   }
+
   .hamburger span,
   .hamburger span::before,
   .hamburger span::after {
     content: "";
     display: block;
-    height: 3px;
+    width: 20px; /* lunghezza barre */
+    height: 2px; /* più sottile */
     background: var(--text);
     border-radius: 2px;
-    transition: all 0.3s ease-in-out;
+    transition: transform 0.3s ease, opacity 0.2s ease, background 0.3s ease;
+    position: relative;
   }
-  .hamburger span::before {
-    transform: translateY(-6px);
-  }
+
+  .hamburger span::before,
   .hamburger span::after {
-    transform: translateY(3px);
+    position: absolute;
+    left: 0;
   }
+
+  .hamburger span::before {
+    transform: translateY(-6px); /* distanza verticale */
+  }
+
+  .hamburger span::after {
+    transform: translateY(6px);
+  }
+
+  /* Stato aperto → icona X */
   .hamburger span.open {
-    background: transparent;
+    background: transparent; /* scompare la barra centrale */
   }
   .hamburger span.open::before {
-    transform: rotate(45deg) translate(4px, 4px);
+    transform: rotate(45deg) translate(3px, 3px);
   }
   .hamburger span.open::after {
-    transform: rotate(-45deg) translate(4px, -4px);
+    transform: rotate(-45deg) translate(3px, -3px);
   }
 }
 </style>
