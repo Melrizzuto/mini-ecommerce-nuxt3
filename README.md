@@ -1,68 +1,75 @@
-# 🛍️ Mini E-commerce - Nuxt 3
+# 🛍️ Mini E-commerce stile ASOS - Nuxt 3
 
-Un progetto semplicissimo creato con [Nuxt 3](https://nuxt.com/) per apprendere le basi del framework. Mostra una lista di prodotti finti e permette di visualizzarli in una pagina dedicata.
+Un piccolo e-commerce ispirato allo stile e alla user experience di ASOS, sviluppato per esercitarmi con Nuxt 3, Vue 3 e Pinia.  
+L’app consente di navigare tra prodotti, filtrarli per categoria, visualizzare schede prodotto dettagliate, aggiungere articoli al carrello e simulare login/logout con autenticazione.  
+
+Live Demo → [https://mini-shop-black.vercel.app/](https://mini-shop-black.vercel.app/)  
+Codice → [https://github.com/Melrizzuto/mini-ecommerce-nuxt3](https://github.com/Melrizzuto/mini-ecommerce-nuxt3)
+
+---
 
 ## 🚀 Tecnologie usate
 
 - [Nuxt 3](https://nuxt.com/)
 - [Vue 3](https://vuejs.org/)
+- [Pinia](https://pinia.vuejs.org/) (stato globale)
 - TypeScript
 - Composition API
-- Routing automatico
-- API interne con `/server/api`
-- CSS base
+- CSS Modules
+- API REST ([Fake Store API](https://fakestoreapi.com/))
+- Vercel (deploy e hosting)
 
-## 📁 Struttura del progetto
+---
 
-mini-ecommerce/
-│
-├── pages/ → Pagine e routing automatico  
-│ └── products.vue → Lista dei prodotti  
-│
-├── components/ → Componenti riutilizzabili  
-│ └── ProductCard.vue → Card del prodotto  
-│
-├── server/api/ → API interne  
-│ └── products.ts → Array finto di prodotti  
-│
-├── layouts/ → Layout generali  
-│ └── default.vue  
-│
-├── nuxt.config.ts → Configurazione progetto  
-└── README.md → Questo file  
+## ✨ Funzionalità principali
 
-## 📦 Setup locale
+- 🏠 **Home & Landing Page** responsive
+- 📦 **Lista prodotti** con filtri per categoria  
+- 📝 **Scheda prodotto** con dettagli e immagini  
+- 🛒 **Carrello persistente** (Pinia + localStorage)
+- 🔑 **Login/Logout** con autenticazione via API
+- 🎨 **Dark mode** con ottimizzazione accessibilità
+- ⚡ **Filtri dinamici** con query params
+- 📱 **Responsive design** ottimizzato per mobile e desktop
+
+---
+## 🔌 API utilizzate
+
+- **Prodotti:** [Fake Store API - Products](https://fakestoreapi.com/products)
+- **Autenticazione:** [Fake Store API - Auth](https://fakestoreapi.com/auth/login)
+
+---
+
+## 🛠 Setup locale
 
 ```bash
 # Clona la repo
-git clone https://github.com/<tuo-utente-GitHub>/mini-ecommerce-nuxt3.git
+git clone https://github.com/Melrizzuto/mini-ecommerce-nuxt3.git
 cd mini-ecommerce-nuxt3
 
 # Installa le dipendenze
-npm install
+pnpm install
 
 # Avvia il server di sviluppo
-npm run dev
+pnpm run dev
 
 Apri il browser su http://localhost:3000
 
 ⸻
-
-✅ Task principali
-	•	Setup progetto con Nuxt 3
-	•	Creazione endpoint /api/products con array di prodotti
-	•	Mostrare lista prodotti nella pagina dedicata
-	•	Creazione componente ProductCard.vue
-	•	Layout base con header e footer
-	•	Aggiunta di stile personalizzato
-	•	(Facoltativo) Deploy su Vercel
-
-⸻
-
-📄 Licenza
-
-Progetto open-source per scopi didattici. Nessuna licenza specifica.
+```
+## ✅ Task completate
+	•	Setup progetto con Nuxt 3 + TypeScript
+	•	Configurazione Pinia e storeToRefs
+	•	Routing protetto e autenticazione
+	•	Integrazione API prodotti e login
+	•	Filtri dinamici con query params
+	•	Dark mode e ottimizzazione UI/UX
+	•	Deploy su Vercel con variabili d’ambiente
 
 ⸻
+
+## 📄 Licenza
+
+Progetto open-source per scopi didattici.
 
 ✍️ Creato da Melania
