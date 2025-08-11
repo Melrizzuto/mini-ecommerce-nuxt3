@@ -1,12 +1,18 @@
 import type { Product } from "@/server/types/Product";
 
 export default defineEventHandler(async (event) => {
-  const { cat } = getQuery(event) as { cat?: string };
+  const query = getQuery(event);
+  const cat = (query.cat as string | undefined)?.toLowerCase();
 
-  const base = "https://fakestoreapi.com/products";
-  const url = cat ? `${base}/category/${encodeURIComponent(cat)}` : base;
+  let products: Product[] = await $fetch<Product[]>(
+    "https://fakestoreapi.com/products"
+  );
 
-  // proxy verso Fake Store API
-  const products = await $fetch<Product[]>(url);
+  if (cat) {
+    products = products.filter(
+      (p: Product) => p.category.toLowerCase() === cat
+    );
+  }
+
   return products;
 });
