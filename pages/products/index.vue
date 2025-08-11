@@ -2,32 +2,42 @@
 import ProductCard from "@/components/ProductCard.vue";
 import type { Product } from "@/server/types/Product";
 
-// uso useFetch per recuperare la lista dei prodotti dall'api
-const { data: products } = await useFetch<Product[]>("/api/products");
+const route = useRoute();
+const cat = computed(() => route.query.cat as string | undefined);
+
+const {
+  data: products,
+  pending,
+  error,
+} = await useFetch<Product[]>("/api/products", {
+  query: { cat },
+  watch: [cat],
+  key: () => `products:${cat.value ?? "all"}`,
+  default: () => [],
+});
 </script>
 
 <template>
-  <div>
-    <!-- mostro il titolo della pagina -->
-    <h1>Products</h1>
+  <section class="products-page">
+    <h1 class="page-title">{{ cat ? `Products — ${cat}` : "Products" }}</h1>
 
-    <!-- creo una griglia di card prodotto usando il componente riutilizzabile -->
-    <div class="product-grid">
-      <ProductCard
-        v-for="product in products"
-        :key="product.id"
-        :product="product"
-      />
+    <div v-if="pending">Loading…</div>
+    <div v-else-if="error">Oops, something went wrong.</div>
+
+    <div v-else class="product-grid">
+      <ProductCard v-for="p in products" :key="p.id" :product="p" />
     </div>
-  </div>
+  </section>
 </template>
 
 <style scoped>
-/* imposto lo stile della griglia dei prodotti */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 3rem;
   margin-top: 2rem;
+}
+.page-title {
+  padding: 0 1rem;
 }
 </style>

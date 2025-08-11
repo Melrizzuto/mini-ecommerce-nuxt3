@@ -14,7 +14,7 @@ const onLogin = async () => {
 </script>
 
 <template>
-  <section class="wrap">
+  <section class="wrap fade-in">
     <h1>Login</h1>
 
     <form v-if="!isAuthenticated" @submit.prevent="onLogin" class="form">
@@ -41,6 +41,22 @@ const onLogin = async () => {
 </template>
 
 <style scoped>
+/* ===== Animazione tipo card ===== */
+@keyframes fadeInCard {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeInCard 0.5s ease-out forwards;
+}
+
 .wrap {
   max-width: 360px;
   margin: 3rem auto;

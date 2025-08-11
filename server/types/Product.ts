@@ -1,11 +1,12 @@
-// server/types/Product.ts
 export type Product = {
   id: number;
-  title?: string;
-  name?: string;
+  title: string;
   price: number;
+  description: string;
+  category: string;
   image: string;
-  description?: string;
-  category?: string;
-  rating?: { rate: number; count: number };
+  rating?: {
+    rate: number;
+    count: number;
+  };
 };

@@ -31,8 +31,8 @@ isLoading.value = false;
     </div>
 
     <div v-else-if="product">
-      <h1>{{ product.name }}</h1>
-      <img :src="product.image" :alt="product.name" width="200" />
+      <h1>{{ product.title }}</h1>
+      <img :src="product.image" :alt="product.title" width="200" />
       <p>{{ product.description }}</p>
       <p>
         <strong>{{ product.price }} €</strong>

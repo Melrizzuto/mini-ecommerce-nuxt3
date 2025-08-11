@@ -10,18 +10,29 @@ const featured = computed(() => products.value.slice(0, 8));
 </script>
 
 <template>
-  <div class="landing">
+  <div class="landing home fade-in">
     <!-- HERO -->
     <section class="hero">
+      <div class="blob blob-a"></div>
+      <div class="blob blob-b"></div>
+
       <div class="hero-content">
-        <h1>New Season. New You.</h1>
-        <p>
+        <p class="eyebrow">NEW DROP</p>
+        <h1 class="headline">
+          <span class="gradient-text">New Season.</span> New You.
+        </h1>
+        <p class="sub">
           Discover must-have pieces: clean essentials, standout accessories, and
           trend-driven tech.
         </p>
         <div class="cta">
           <NuxtLink to="/products" class="btn-asos">Shop now</NuxtLink>
           <NuxtLink to="/about" class="btn-asos-outline">Learn more</NuxtLink>
+        </div>
+
+        <div class="promo">
+          <span class="tag">-20%</span>
+          <span>Use code <strong>NEWYOU20</strong> at checkout</span>
         </div>
       </div>
     </section>
@@ -37,7 +48,7 @@ const featured = computed(() => products.value.slice(0, 8));
     <section class="cats">
       <NuxtLink
         :to="{ path: '/products', query: { cat: `men's clothing` } }"
-        class="cat-card"
+        class="cat-card tilt"
       >
         <div class="cat-inner">
           <h3>Men</h3>
@@ -47,7 +58,7 @@ const featured = computed(() => products.value.slice(0, 8));
 
       <NuxtLink
         :to="{ path: '/products', query: { cat: `women's clothing` } }"
-        class="cat-card"
+        class="cat-card tilt"
       >
         <div class="cat-inner">
           <h3>Women</h3>
@@ -57,7 +68,7 @@ const featured = computed(() => products.value.slice(0, 8));
 
       <NuxtLink
         :to="{ path: '/products', query: { cat: 'jewelery' } }"
-        class="cat-card"
+        class="cat-card tilt"
       >
         <div class="cat-inner">
           <h3>Jewelery</h3>
@@ -67,7 +78,7 @@ const featured = computed(() => products.value.slice(0, 8));
 
       <NuxtLink
         :to="{ path: '/products', query: { cat: 'electronics' } }"
-        class="cat-card"
+        class="cat-card tilt"
       >
         <div class="cat-inner">
           <h3>Electronics</h3>
@@ -84,50 +95,165 @@ const featured = computed(() => products.value.slice(0, 8));
       </div>
 
       <div class="grid">
-        <ProductCard v-for="p in featured" :key="p.id" :product="p" />
+        <div v-for="p in featured" :key="p.id">
+          <ProductCard :product="p" />
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <style scoped>
-/* (stili identici alla versione precedente) */
+/* ===== Animazione all'ingresso ===== */
+@keyframes fadeInCard {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeInCard 0.5s ease-out forwards;
+}
+/* ===== HERO ===== */
 .hero {
   position: relative;
-  min-height: 64vh;
+  min-height: 70vh;
   display: grid;
   place-items: center;
-  text-align: center;
-  padding: 3rem 1.25rem;
-  background: radial-gradient(
-      1200px 600px at 80% -10%,
-      #f3f3f3 0%,
-      transparent 60%
-    ),
-    radial-gradient(900px 500px at -10% 120%, #f6f6f6 0%, transparent 60%), #fff;
-  border-bottom: 1px solid #eee;
+  padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+  overflow: hidden;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
 }
 .hero-content {
-  max-width: 900px;
+  position: relative;
+  max-width: 980px;
+  text-align: center;
+  z-index: 1;
 }
-.hero h1 {
-  font-size: clamp(2rem, 4vw, 3rem);
+
+.eyebrow {
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  background: color-mix(in oklab, var(--surface) 70%, transparent);
+  margin-bottom: 0.75rem;
+}
+.headline {
+  margin: 0 0 0.4rem;
   line-height: 1.05;
-  margin: 0 0 0.75rem;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.2rem, 6vw, 3.6rem);
+  color: var(--text);
 }
-.hero p {
-  color: #555;
+.gradient-text {
+  background: linear-gradient(90deg, #6ea8ff, #b388ff, #ff88b3);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: hue 10s linear infinite;
+}
+@keyframes hue {
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
+.sub {
+  color: var(--muted);
   font-size: 1.05rem;
   margin: 0 auto 1.25rem;
   max-width: 680px;
 }
+
 .cta {
   display: inline-flex;
   gap: 0.75rem;
   flex-wrap: wrap;
   justify-content: center;
 }
+
+/* promo pill */
+.promo {
+  margin-top: 1rem;
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  border: 1px dashed var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  background: color-mix(in oklab, var(--surface) 75%, transparent);
+  font-size: 0.9rem;
+}
+.promo .tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  min-width: 38px;
+  padding: 0 0.5rem;
+  background: #111;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+/* floating blobs (wow but subtle) */
+.blob {
+  position: absolute;
+  filter: blur(40px);
+  opacity: 0.45;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  background: radial-gradient(closest-side, #b388ff, transparent);
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  animation: float 16s ease-in-out infinite;
+}
+.blob-b {
+  background: radial-gradient(closest-side, #6ea8ff, transparent);
+}
+.blob-a {
+  top: -15%;
+  right: -10%;
+}
+.blob-b {
+  bottom: -20%;
+  left: -10%;
+  animation-delay: -8s;
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(0, 20px, 0) scale(1.05);
+  }
+}
+/* respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .blob {
+    display: none;
+  }
+  .gradient-text {
+    animation: none;
+  }
+}
+
+/* ===== USP ===== */
 .usp {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -137,19 +263,21 @@ const featured = computed(() => products.value.slice(0, 8));
   margin: 0 auto;
 }
 .usp-item {
-  background: #fafafa;
-  border: 1px solid #eee;
-  border-radius: 10px;
-  padding: 0.8rem 1rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
   text-align: center;
-  font-weight: 600;
-  color: #333;
+  font-weight: 700;
+  color: var(--text);
 }
 @media (max-width: 768px) {
   .usp {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== CATEGORIES ===== */
 .cats {
   max-width: 1200px;
   margin: 1.25rem auto 0;
@@ -168,19 +296,30 @@ const featured = computed(() => products.value.slice(0, 8));
     grid-template-columns: 1fr;
   }
 }
+
 .cat-card {
   position: relative;
   display: block;
-  height: 180px;
-  border: 1px solid #eee;
-  border-radius: 12px;
+  height: 190px;
+  border: 1px solid var(--card-bd);
+  border-radius: 14px;
   text-decoration: none;
   overflow: hidden;
-  background: linear-gradient(135deg, #f7f7f7, #ececec);
+  background: radial-gradient(
+      100% 100% at 0% 0%,
+      color-mix(in oklab, var(--surface) 80%, transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      120% 100% at 100% 100%,
+      color-mix(in oklab, var(--surface) 65%, transparent),
+      transparent 60%
+    );
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.3s;
 }
-.cat-card:hover {
-  transform: translateY(-2px);
-  transition: transform 0.15s ease;
+.tilt:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow: 0 14px 36px color-mix(in oklab, var(--text) 10%, transparent);
 }
 .cat-inner {
   position: absolute;
@@ -191,20 +330,22 @@ const featured = computed(() => products.value.slice(0, 8));
 }
 .cat-inner h3 {
   margin: 0;
-  color: #111;
+  color: var(--text);
   font-size: 1.2rem;
   letter-spacing: 0.02em;
 }
 .cat-inner span {
-  color: #666;
+  color: var(--muted);
   font-size: 0.9rem;
 }
+
+/* ===== FEATURED ===== */
 .featured {
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 1rem;
 }
-.featured .head {
+.head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -214,18 +355,22 @@ const featured = computed(() => products.value.slice(0, 8));
 .featured h2 {
   margin: 0;
   font-size: 1.4rem;
+  color: var(--text);
 }
-.featured .link {
-  color: #111;
+.link {
+  color: var(--text);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
 }
-.featured .link:hover {
+.link:hover {
   text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
 }
+
 .grid {
   display: grid;
-  gap: 3rem;
+  gap: 1.25rem;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 @media (max-width: 1100px) {
@@ -243,40 +388,54 @@ const featured = computed(() => products.value.slice(0, 8));
     grid-template-columns: 1fr;
   }
 }
+
+/* ===== BUTTONS (ASOS) — no underline ever ===== */
+.btn-asos,
+.btn-asos-outline {
+  text-decoration: none !important;
+}
+
+/* Solid */
 .btn-asos {
-  background: #111;
-  color: #fff;
+  background: var(--btn-bg);
+  color: var(--btn-fg);
   padding: 0.7rem 1.4rem;
-  border: 2px solid transparent;
-  border-radius: 6px;
-  font-weight: 700;
+  border: 2px solid var(--btn-bd);
+  border-radius: 999px;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   font-size: 0.9rem;
   transition: background-color 0.15s, color 0.15s, border-color 0.15s,
-    transform 0.15s;
+    transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 6px 18px color-mix(in oklab, var(--text) 8%, transparent);
 }
 .btn-asos:hover {
-  background: #fff;
-  color: #111;
-  border-color: #111;
+  background: var(--btn-bg-hover);
+  color: var(--btn-fg-hover);
+  border-color: var(--btn-bd);
   transform: translateY(-1px);
+  box-shadow: 0 10px 28px color-mix(in oklab, var(--text) 12%, transparent);
 }
+
+/* Outline */
 .btn-asos-outline {
   background: transparent;
-  color: #111;
+  color: var(--text);
   padding: 0.7rem 1.4rem;
-  border: 2px solid #111;
-  border-radius: 6px;
-  font-weight: 700;
+  border: 2px solid var(--text);
+  border-radius: 999px;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.02em;
   font-size: 0.9rem;
-  transition: background-color 0.15s, color 0.15s, transform 0.15s;
+  transition: background-color 0.15s, color 0.15s, transform 0.15s,
+    border-color 0.15s, box-shadow 0.15s;
 }
 .btn-asos-outline:hover {
-  background: #111;
-  color: #fff;
+  background: var(--text);
+  color: var(--bg);
   transform: translateY(-1px);
+  box-shadow: 0 10px 28px color-mix(in oklab, var(--text) 12%, transparent);
 }
 </style>

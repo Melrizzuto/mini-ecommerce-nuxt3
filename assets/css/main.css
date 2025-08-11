@@ -1,28 +1,80 @@
-/* assets/css/main.css */
+/* RESET UTILE */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* LIGHT */
+:root {
+  --bg: #ffffff;
+  --text: #111111;
+  --muted: #6b7280;
+
+  --surface: #f7f7f7;
+  --border: #e5e7eb;
+
+  --card-bg: #ffffff;
+  --card-bd: #eeeeee;
+
+  --btn-bg: #111111;
+  --btn-fg: #ffffff;
+  --btn-bd: #111111;
+  --btn-bg-hover: #ffffff;
+  --btn-fg-hover: #111111;
+}
+
+/* DARK */
+html.dark {
+  --bg: #0e0f12; /* BODY */
+  --text: #f3f4f6;
+  --muted: #9aa0a6;
+
+  --surface: #15181b; /* superfici “secondarie” */
+  --border: #262a2f;
+
+  --card-bg: #121417; /* card */
+  --card-bd: #262a2f;
+
+  --btn-bg: #f3f4f6; /* bottoni invertiti */
+  --btn-fg: #0e0f12;
+  --btn-bd: #f3f4f6;
+  --btn-bg-hover: transparent;
+  --btn-fg-hover: #f3f4f6;
+}
+
+html {
+  transition: background-color 0.35s, color 0.35s;
+}
 body {
   margin: 0;
-  font-family: "Poppins", "Helvetica Neue", sans-serif;
-  background-color: #fff;
-  color: #1a1a1a;
+  background: var(--bg);
+  color: var(--text);
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
+/* UTILITIES GLOBALI (riusa queste classi/variabili) */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
 }
-
-h1,
-h2 {
-  font-weight: 600;
+.surface {
+  background: var(--surface);
 }
-
-ul {
-  list-style: none;
-  padding: 0;
+.border {
+  border-color: var(--border);
 }
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 1rem;
+.btn {
+  background: var(--btn-bg);
+  color: var(--btn-fg);
+  border: 2px solid var(--btn-bd);
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s,
+    transform 0.12s;
+}
+.btn:hover {
+  background: var(--btn-bg-hover);
+  color: var(--btn-fg-hover);
 }

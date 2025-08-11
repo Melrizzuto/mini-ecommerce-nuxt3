@@ -2,6 +2,13 @@
 import { useCartStore } from "@/stores/cart";
 import { storeToRefs } from "pinia";
 import { useAuth } from "@/composables/useAuth";
+import ThemeToggle from "@/components/ThemeToggle.vue";
+
+const colorMode = useColorMode();
+
+const toggleTheme = () => {
+  colorMode.preference = colorMode.preference === "dark" ? "light" : "dark";
+};
 const { isAuthenticated, logout } = useAuth();
 
 const cart = useCartStore();
@@ -11,7 +18,9 @@ const { count } = storeToRefs(cart); // reattivo e type-safe
 <template>
   <header class="site-header">
     <div class="container header-content">
-      <h1 class="logo">Mini ASOS</h1>
+      <NuxtLink to="/" class="logo-link">
+        <h1 class="logo">Mini ASOS</h1>
+      </NuxtLink>
       <nav class="nav-links">
         <NuxtLink to="/">Home</NuxtLink>
         <NuxtLink to="/products">Products</NuxtLink>
@@ -22,8 +31,9 @@ const { count } = storeToRefs(cart); // reattivo e type-safe
         <NuxtLink to="/cart" class="cart-link">
           🛒
           <span v-if="count" class="badge">{{ count }}</span>
-          <span class="sr-only">Vai al carrello</span>
+          <span class="sr-only">Go to cart</span>
         </NuxtLink>
+        <ThemeToggle />
       </nav>
     </div>
   </header>
@@ -31,16 +41,12 @@ const { count } = storeToRefs(cart); // reattivo e type-safe
 
 <style scoped>
 .site-header {
-  background-color: #fff;
-  border-bottom: 1px solid #ddd;
-  padding: 1rem 0;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .container {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
@@ -54,6 +60,17 @@ const { count } = storeToRefs(cart); // reattivo e type-safe
 .logo {
   font-size: 1.5rem;
   font-weight: bold;
+  color: var(--text);
+}
+
+.logo-link {
+  text-decoration: none;
+  color: var(--text);
+}
+.logo-link:hover .logo {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 2px;
 }
 
 .nav-links {
@@ -62,14 +79,43 @@ const { count } = storeToRefs(cart); // reattivo e type-safe
   align-items: center;
 }
 
-.nav-links a {
-  font-weight: 500;
-  text-decoration: none;
-  color: #1a1a1a;
+/* Toggle tema: più coerente con il dark */
+.theme-toggle {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--text);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s,
+    transform 0.1s;
+}
+.theme-toggle:hover {
+  background: var(--surface);
+}
+.theme-toggle:active {
+  transform: scale(0.98);
 }
 
+.nav-links a,
+.linklike,
+.cart-link {
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text);
+  transition: color 0.2s ease;
+}
 .nav-links a:hover {
   text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 2px;
+}
+
+.linklike {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
 }
 
 .cart-link {
@@ -84,7 +130,7 @@ const { count } = storeToRefs(cart); // reattivo e type-safe
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
-  background: #111;
+  background: #111; /* piccolo badge: resta scuro per contrasto */
   color: #fff;
   border-radius: 999px;
   display: inline-flex;

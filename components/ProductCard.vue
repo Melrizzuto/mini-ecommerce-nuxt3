@@ -15,23 +15,20 @@ function addToCart() {
 </script>
 
 <template>
-  <!-- La card è un link alla pagina prodotto, ma il bottone non naviga (stop+prevent) -->
+  <!-- Card prodotto con animazione di ingresso -->
   <NuxtLink :to="`/products/${product.id}`" class="product-card">
-    <!-- immagine uniforme -->
     <img
       class="product-image"
       :src="product.image"
-      :alt="product.title || product.name"
+      :alt="product.title || product.title"
       loading="lazy"
     />
 
-    <!-- info con spazio flessibile per spingere il bottone in basso -->
     <div class="card-info">
-      <h2 class="card-title">{{ product.title || product.name }}</h2>
+      <h2 class="card-title">{{ product.title || product.title }}</h2>
       <p class="price">{{ product.price.toFixed(2) }} €</p>
     </div>
 
-    <!-- bottone stile ASOS -->
     <button
       class="btn-cart"
       :class="{ added }"
@@ -56,66 +53,76 @@ function addToCart() {
 </template>
 
 <style scoped>
-/* ===== Card layout (uniforme e stabile) ===== */
+/* ===== Animazione all'ingresso ===== */
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 .product-card {
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  height: 100%; /* tutte le card stessa altezza nella grid */
-  border: 1px solid #eee;
+  height: 100%;
+  background: var(--card-bg);
+  border: 1px solid var(--card-bd);
   border-radius: 12px;
   padding: 1rem;
-  background: #fafafa;
   text-decoration: none;
-  color: inherit;
+  color: var(--text);
   text-align: center;
-  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  animation: fadeUp 0.5s ease forwards;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 .product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transform: translateY(-6px) rotate3d(1, 1, 0, 3deg);
+  box-shadow: 0 12px 30px color-mix(in oklab, var(--text) 12%, transparent);
 }
 
-/* immagine coerente */
 .product-image {
   width: 100%;
   height: 260px;
-  object-fit: contain; /* contain per ecommerce */
-  background: #fff;
+  object-fit: contain;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 10px;
-  border: 1px solid #f0f0f0;
 }
 
-/* blocco info che cresce e spinge il bottone in basso */
 .card-info {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   gap: 0.35rem;
 }
 .card-title {
   margin: 0;
   font-size: 1rem;
   font-weight: 600;
-  color: #111;
+  color: var(--text);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 2.6em; /* riserva spazio per 2 righe */
+  line-height: 1.3;
+  min-height: calc(1.3em * 2);
 }
 .price {
   margin: 0;
   font-weight: 700;
-  color: #111;
+  color: var(--text);
 }
 
-/* ===== Bottone stile ASOS ===== */
+/* ===== Bottone stile ASOS migliorato ===== */
 .btn-cart {
-  --bg: #111;
-  --fg: #fff;
-  --bd: #111;
+  --bg: var(--btn-bg);
+  --fg: var(--btn-fg);
+  --bd: var(--btn-bd);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -130,30 +137,31 @@ function addToCart() {
   text-transform: uppercase;
   letter-spacing: 0.02em;
   font-size: 0.9rem;
-  transition: background-color 0.15s, color 0.15s, border-color 0.15s,
-    transform 0.12s, box-shadow 0.15s;
-  margin-top: auto; /* resta sempre in basso */
+  transition: background-color 0.2s ease, color 0.2s ease, transform 0.12s ease,
+    box-shadow 0.2s ease;
+  margin-top: auto;
 }
 .btn-cart:hover {
-  --bg: #fff;
-  --fg: #111;
-  --bd: #111;
-  transform: translateY(-1px);
+  --bg: var(--btn-bg-hover);
+  --fg: var(--btn-fg-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px color-mix(in oklab, var(--text) 10%, transparent);
 }
 .btn-cart:active {
   transform: translateY(0);
 }
 .btn-cart:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.14);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--text) 20%, transparent);
 }
 
-/* stato “added” */
 .added {
   --bg: #16a34a;
   --fg: #fff;
   --bd: #16a34a;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
+
 .icon {
   width: 18px;
   height: 18px;
@@ -164,11 +172,11 @@ function addToCart() {
   gap: 0.5rem;
 }
 
-/* riduci animazioni per accessibilità */
 @media (prefers-reduced-motion: reduce) {
   .product-card,
   .btn-cart {
     transition: none;
+    animation: none;
   }
 }
 </style>
