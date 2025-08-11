@@ -71,3 +71,5 @@ Apri il browser su http://localhost:3000
 ## 📄 Licenza
 
 Progetto open-source per scopi didattici.
+
+✍️ Creato da Melania
