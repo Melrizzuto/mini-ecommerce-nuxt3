@@ -54,6 +54,8 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 
 /* UTILITIES GLOBALI (riusa queste classi/variabili) */

@@ -70,7 +70,7 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
         <!-- Se loggato -->
         <template v-else>
           <button
-            class="linklike"
+            class="linklike btn-logout"
             @click="
               () => {
                 logout();
@@ -222,6 +222,28 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
   font-size: 0.75rem;
   line-height: 1;
   font-weight: 700;
+}
+/* Bottone Logout stile link elegante */
+.btn-logout {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-logout:hover {
+  color: var(--btn-fg-hover);
+  background-color: var(--surface);
+}
+
+.btn-logout:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--btn-bd);
 }
 
 /* Mobile */
