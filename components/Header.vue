@@ -81,9 +81,7 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
         <NuxtLink to="/cart" class="cart-link" @click="closeMenu">
           🛒
           <span v-if="count" class="badge">{{ count }}</span>
-          <span class="sr-only">Go to cart</span>
         </NuxtLink>
-
         <ThemeToggle />
       </nav>
     </div>
@@ -197,6 +195,29 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
   align-items: center;
   justify-content: center;
   font-size: 0.75rem;
+}
+.cart-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.cart-link .badge {
+  position: absolute;
+  top: -6px;
+  right: -10px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: #111;
+  color: #fff;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  line-height: 1;
+  font-weight: 700;
 }
 
 /* Mobile */
