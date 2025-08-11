@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useCartStore } from "@/stores/cart";
+import { useRouter } from "vue-router";
+
 const cart = useCartStore();
+const router = useRouter();
 
 const formatPrice = (n: number) => `${n.toFixed(2)} €`;
 
@@ -9,10 +12,15 @@ const dec = (id: number) => {
   if (!it) return;
   cart.setQty(id, Math.max(1, it.qty - 1));
 };
+
 const inc = (id: number) => {
   const it = cart.items.find((i) => i.product.id === id);
   if (!it) return;
   cart.setQty(id, it.qty + 1);
+};
+
+const goToCheckout = () => {
+  router.push("/checkout");
 };
 </script>
 
@@ -28,6 +36,7 @@ const inc = (id: number) => {
 
         <div class="info">
           <h3 class="title">{{ it.product.title }}</h3>
+
           <div class="meta">
             <span v-if="it.product.category" class="chip">
               {{ it.product.category }}
@@ -80,7 +89,7 @@ const inc = (id: number) => {
               </span>
             </div>
 
-            <button class="remove" @click="cart.remove(it.product.id)">
+            <button class="btn remove" @click="cart.remove(it.product.id)">
               Remove
             </button>
           </div>
@@ -91,14 +100,16 @@ const inc = (id: number) => {
         <div class="sum">
           Total: <strong>{{ formatPrice(cart.total) }}</strong>
         </div>
-        <button class="clear" @click="cart.clear()">Clear cart</button>
+        <div class="actions">
+          <button class="btn clear" @click="cart.clear()">Clear cart</button>
+          <button class="btn checkout" @click="goToCheckout">Checkout</button>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <style scoped>
-/* ===== Animazione all'ingresso ===== */
 @keyframes fadeUp {
   0% {
     opacity: 0;
@@ -109,13 +120,13 @@ const inc = (id: number) => {
     transform: translateY(0) scale(1);
   }
 }
+
 .cart {
   max-width: 1000px;
   margin: 2rem auto;
   padding: 0 1rem;
 }
 
-/* Stato carrello vuoto */
 .empty {
   padding: 2rem;
   background: var(--bg-secondary);
@@ -126,7 +137,6 @@ const inc = (id: number) => {
   box-shadow: var(--shadow-soft);
 }
 
-/* Lista prodotti */
 .list {
   display: grid;
   gap: 1rem;
@@ -163,9 +173,9 @@ const inc = (id: number) => {
 }
 
 .title {
-  margin: 0;
   font-size: 1.1rem;
   font-weight: 600;
+  margin: 0;
 }
 
 .meta {
@@ -193,7 +203,6 @@ const inc = (id: number) => {
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  margin: 0.25rem 0 0.5rem;
 }
 
 .controls {
@@ -214,15 +223,16 @@ const inc = (id: number) => {
 
 .qty button {
   border: 0;
-  background: var(--bg-secondary);
-  color: var(--text);
+  background: var(--primary);
+  color: #fff;
   padding: 0.4rem 0.6rem;
   cursor: pointer;
+  font-weight: bold;
   transition: background 0.2s;
 }
 
 .qty button:hover {
-  background: var(--bg-hover);
+  background: var(--primary-hover);
 }
 
 .qty input {
@@ -243,25 +253,48 @@ const inc = (id: number) => {
 .price {
   color: var(--text);
 }
-
 .subtotal {
   color: var(--text-strong);
   font-weight: 600;
 }
 
-.remove {
-  background: var(--bg-card);
-  border: 1px solid var(--danger);
-  color: var(--danger);
-  padding: 0.45rem 0.7rem;
-  border-radius: 8px;
+/* ===== BOTTONI ===== */
+.btn {
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
   cursor: pointer;
-  transition: background 0.2s ease, color 0.2s ease;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
-.remove:hover {
-  background: var(--danger);
+.btn.remove {
+  background: var(--btn-bg);
   color: #fff;
+}
+.btn.remove:hover {
+  background: #ff4d4d;
+}
+
+.btn.clear {
+  background: var(--bg);
+  color: var(--text);
+}
+.btn.clear:hover {
+  background: var(--btn-fg-hover);
+  border: var(--btn-bg-hover);
+  color: var(--bg);
+}
+
+.btn.checkout {
+  background: var(--btn-bd);
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+}
+.btn.checkout:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
 }
 
 .total {
@@ -273,22 +306,12 @@ const inc = (id: number) => {
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--bg-secondary);
-  color: var(--text);
   box-shadow: var(--shadow-soft);
 }
 
-.clear {
-  background: var(--primary);
-  color: #fff;
-  border: 1px solid var(--primary);
-  padding: 0.6rem 0.9rem;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.clear:hover {
-  background: var(--primary-hover);
+.actions {
+  display: flex;
+  gap: 0.5rem;
 }
 
 @media (max-width: 700px) {
