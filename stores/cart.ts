@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { Product } from "@/server/types/Product";
+import type { Product } from "@/types/Product";
 
 type CartItem = { product: Product; qty: number };
 type Coupon = { code: string; percent: number } | null;

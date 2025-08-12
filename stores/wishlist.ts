@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { Product } from "@/server/types/Product";
+import type { Product } from "@/types/Product";
 
 const STORAGE_KEY = "wishlist:v1";
 

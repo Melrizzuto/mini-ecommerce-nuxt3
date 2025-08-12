@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Product } from "@/server/types/Product";
+import type { Product } from "@/types/Product";
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useCartStore } from "@/stores/cart";
@@ -165,12 +165,7 @@ function addToCart() {
   --maxw: 1120px;
 }
 
-.container {
-  max-width: var(--maxw);
-  margin-inline: auto;
-  padding: clamp(16px, 3vw, 32px);
-  color: var(--text);
-}
+/* use global .container from main.css */
 
 /* ===== Top micro UI (eyebrow, gradient) in linea con home ===== */
 .eyebrow {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ProductCard from "@/components/ProductCard.vue";
-import type { Product } from "@/server/types/Product";
+import type { Product } from "@/types/Product";
 
 const route = useRoute();
 const cat = computed(() => route.query.cat as string | undefined);

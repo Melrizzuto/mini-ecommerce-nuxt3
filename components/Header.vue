@@ -134,8 +134,6 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
   padding: 0.5rem 0;
 }
 .container {
-  margin: 0 auto;
-  padding: 0 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;

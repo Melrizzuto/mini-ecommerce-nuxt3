@@ -28,6 +28,10 @@ img {
   --btn-fg-hover: #111111;
   --badge-bg: #111;
   --badge-text: #fff;
+
+  /* layout tokens */
+  --container-max: 1200px;
+  --container-pad: 1.5rem;
 }
 
 /* DARK */
@@ -63,6 +67,11 @@ body {
 }
 
 /* UTILITIES GLOBALI (riusa queste classi/variabili) */
+.container {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-pad);
+}
 .card {
   background: var(--card-bg);
   border: 1px solid var(--card-bd);
