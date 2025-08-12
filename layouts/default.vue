@@ -25,7 +25,7 @@ import Footer from "@/components/Footer.vue";
 }
 
 .skip-link {
-  position: absolute;
+  position: relative;
   left: -999px;
   top: auto;
   width: 1px;

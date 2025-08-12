@@ -154,6 +154,12 @@ onBeforeUnmount(() => {
 <style scoped>
 /* --- Header Base --- */
 .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   padding: 0.5rem 0;
