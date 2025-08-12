@@ -25,7 +25,7 @@ function toggleWishlist() {
 </script>
 
 <template>
-  <article class="product-card">
+  <article class="product-card fade-in">
     <!-- Media / overlay wish -->
     <div class="media">
       <NuxtLink
@@ -101,6 +101,21 @@ function toggleWishlist() {
 </template>
 
 <style scoped>
+/* ===== Animazione all'ingresso ===== */
+@keyframes fadeInCard {
+  0% {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeInCard 0.5s ease-out forwards;
+}
 /* Card */
 .product-card {
   display: grid;
