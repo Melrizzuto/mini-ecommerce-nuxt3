@@ -38,7 +38,7 @@
 .about-page {
   max-width: 800px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 10rem;
   text-align: center;
 }
 
