@@ -15,32 +15,3 @@ import Footer from "@/components/Footer.vue";
     <Footer />
   </div>
 </template>
-
-<style scoped>
-.layout-root {
-  min-height: 100dvh;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  min-width: 350px;
-}
-
-/* .skip-link {
-  position: relative;
-  left: -999px;
-  top: auto;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-.skip-link:focus {
-  left: 1rem;
-  top: 1rem;
-  width: auto;
-  height: auto;
-  padding: 0.5rem 0.75rem;
-  background: #111;
-  color: #fff;
-  border-radius: 8px;
-  z-index: 1000;
-} */
-</style>
