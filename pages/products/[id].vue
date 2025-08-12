@@ -59,7 +59,7 @@ watchEffect(() => {
       script: [
         {
           type: "application/ld+json",
-          children: JSON.stringify(jsonLd),
+          innerHTML: JSON.stringify(jsonLd),
         },
       ],
     });
@@ -75,7 +75,7 @@ function addToCart() {
 </script>
 
 <template>
-  <div class="pdp container">
+  <div class="pdp pdp__container">
     <!-- Loading -->
     <div
       v-if="isLoading"
@@ -211,7 +211,7 @@ function addToCart() {
   --maxw: 1120px;
 }
 
-.container {
+.pdp__container {
   max-width: var(--maxw);
   margin-inline: auto;
   padding: clamp(16px, 3vw, 32px);

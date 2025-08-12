@@ -4,7 +4,8 @@ import type { Product } from "@/server/types/Product";
 
 useSeoMeta({
   title: "Home",
-  description: "Welcome to Mini E‑commerce. Discover products with a fast, modern Nuxt 3 experience.",
+  description:
+    "Welcome to Mini E‑commerce. Discover products with a fast, modern Nuxt 3 experience.",
   ogTitle: "Mini E‑commerce",
   ogDescription: "Discover products with a fast, modern Nuxt 3 experience.",
 });
@@ -122,10 +123,10 @@ const featured = computed(() => products.value.slice(0, 8));
     transform: scale(1);
   }
 }
-
 .fade-in {
   animation: fadeInCard 0.5s ease-out forwards;
 }
+
 /* ===== HERO ===== */
 .hero {
   position: relative;
@@ -143,7 +144,6 @@ const featured = computed(() => products.value.slice(0, 8));
   text-align: center;
   z-index: 1;
 }
-
 .eyebrow {
   display: inline-block;
   font-weight: 700;
@@ -174,14 +174,12 @@ const featured = computed(() => products.value.slice(0, 8));
     filter: hue-rotate(360deg);
   }
 }
-
 .sub {
   color: var(--muted);
   font-size: 1.05rem;
   margin: 0 auto 1.25rem;
   max-width: 680px;
 }
-
 .cta {
   display: inline-flex;
   gap: 0.75rem;
@@ -216,7 +214,7 @@ const featured = computed(() => products.value.slice(0, 8));
   letter-spacing: 0.03em;
 }
 
-/* floating blobs (wow but subtle) */
+/* floating blobs */
 .blob {
   position: absolute;
   filter: blur(40px);
@@ -250,7 +248,8 @@ const featured = computed(() => products.value.slice(0, 8));
     transform: translate3d(0, 20px, 0) scale(1.05);
   }
 }
-/* respect reduced motion */
+
+/* reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .blob {
     display: none;
@@ -401,7 +400,7 @@ const featured = computed(() => products.value.slice(0, 8));
     height: 72px;
   }
 }
-/* ===== BUTTONS (ASOS) — no underline ever ===== */
+/* ===== BUTTONS STYLES ===== */
 .btn-asos,
 .btn-asos-outline {
   text-decoration: none !important;

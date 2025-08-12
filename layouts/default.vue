@@ -18,13 +18,13 @@ import Footer from "@/components/Footer.vue";
 
 <style scoped>
 .layout-root {
-  /* Occupy full viewport height and let content fill remaining space below header */
   min-height: 100dvh;
   display: grid;
-  grid-template-rows: auto 1fr auto; /* header | content | footer */
+  grid-template-rows: auto 1fr auto;
+  min-width: 500px;
 }
 
-.skip-link {
+/* .skip-link {
   position: relative;
   left: -999px;
   top: auto;
@@ -42,5 +42,5 @@ import Footer from "@/components/Footer.vue";
   color: #fff;
   border-radius: 8px;
   z-index: 1000;
-}
+} */
 </style>
