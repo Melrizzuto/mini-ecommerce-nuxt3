@@ -133,7 +133,7 @@ const goToCheckout = () => {
 .cart {
   max-width: 1000px;
   margin: 2rem auto;
-  padding: 0 1rem;
+  padding: 3rem 1rem;
 }
 
 .empty {
