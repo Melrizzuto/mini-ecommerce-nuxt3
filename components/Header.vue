@@ -4,6 +4,7 @@ import { useWishlistStore } from "@/stores/wishlist";
 import { storeToRefs } from "pinia";
 import { useAuth } from "@/composables/useAuth";
 import ThemeToggle from "@/components/ThemeToggle.vue";
+import { ref, onMounted, onBeforeUnmount, nextTick } from "vue";
 
 const { isAuthenticated, logout } = useAuth();
 const cart = useCartStore();
@@ -13,6 +14,92 @@ const wishlist = useWishlistStore();
 const isMenuOpen = ref(false);
 const isScrolled = ref(false);
 
+const headerEl = ref<HTMLElement | null>(null);
+const navEl = ref<HTMLElement | null>(null);
+const hamburgerEl = ref<HTMLElement | null>(null);
+
+const focusablesSelector =
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+function getNavFocusables() {
+  if (!navEl.value) return [] as HTMLElement[];
+  return Array.from(
+    navEl.value.querySelectorAll<HTMLElement>(focusablesSelector)
+  ).filter((el) => !el.hasAttribute("disabled") && el.tabIndex !== -1);
+}
+
+function trapFocus(e: KeyboardEvent) {
+  if (!isMenuOpen.value || e.key !== "Tab") return;
+
+  const nav = navEl.value;
+  const hamburger = hamburgerEl.value as HTMLElement | null;
+  if (!nav || !hamburger) return;
+
+  const navNodes = getNavFocusables();
+  const allNodes = [hamburger, ...navNodes];
+  if (!allNodes.length) return;
+
+  const first = allNodes[0]; // hamburger
+  const last = allNodes[allNodes.length - 1];
+  const firstNav = navNodes[0] ?? hamburger;
+  const active = document.activeElement as HTMLElement | null;
+
+  // Se il focus non è nel menu o sull'hamburger, portalo all'hamburger
+  if (active && !nav.contains(active) && active !== hamburger) {
+    e.preventDefault();
+    first.focus();
+    return;
+  }
+
+  // Tab avanti dall'hamburger -> primo link del menu
+  if (!e.shiftKey && active === hamburger) {
+    e.preventDefault();
+    firstNav.focus();
+    return;
+  }
+
+  // Shift+Tab dal primo link -> hamburger
+  if (e.shiftKey && active === firstNav) {
+    e.preventDefault();
+    hamburger.focus();
+    return;
+  }
+
+  // Wrap: mantieni il focus dentro al drawer
+  if (e.shiftKey && active === first) {
+    e.preventDefault();
+    last.focus();
+    return;
+  }
+  if (!e.shiftKey && active === last) {
+    e.preventDefault();
+    first.focus();
+    return;
+  }
+
+  // Rete di sicurezza se per qualche motivo uscisse
+  if (active && !allNodes.includes(active)) {
+    e.preventDefault();
+    first.focus();
+  }
+}
+
+function setScrollLock(lock: boolean) {
+  if (lock) {
+    const sbw = window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = "hidden";
+    if (sbw > 0) document.body.style.paddingRight = `${sbw}px`;
+  } else {
+    document.body.style.overflow = "";
+    document.body.style.paddingRight = "";
+  }
+}
+
+const updateHeaderHeight = () => {
+  const h = headerEl.value?.offsetHeight || 64;
+  document.documentElement.style.setProperty("--header-h", `${h}px`);
+};
+
 const firstNavLink = ref<HTMLAnchorElement | null>(null);
 let lastFocused: HTMLElement | null = null;
 
@@ -20,22 +107,25 @@ const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
   if (isMenuOpen.value) {
     lastFocused = document.activeElement as HTMLElement;
-    nextTick(() => firstNavLink.value?.focus());
-    document.body.style.overflow = "hidden";
+    setScrollLock(true);
+    // Focus all'hamburger (che ora è X) dopo update DOM
+    nextTick(() => {
+      hamburgerEl.value?.focus();
+    });
   } else {
-    document.body.style.overflow = "";
+    setScrollLock(false);
     lastFocused?.focus?.();
   }
 };
 const closeMenu = () => {
   isMenuOpen.value = false;
-  document.body.style.overflow = "";
+  setScrollLock(false);
   lastFocused?.focus?.();
 };
 
 const onClickOutside = (e: MouseEvent) => {
-  const nav = document.querySelector(".nav-links");
-  const btn = document.querySelector(".hamburger");
+  const nav = navEl.value;
+  const btn = hamburgerEl.value;
   if (
     isMenuOpen.value &&
     nav &&
@@ -51,20 +141,48 @@ function handleScroll() {
   isScrolled.value = window.scrollY > 4;
 }
 
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === "Escape" && isMenuOpen.value) {
+    e.preventDefault();
+    closeMenu();
+  }
+  trapFocus(e);
+}
+
+function handleHamburgerKeydown(e: KeyboardEvent) {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    if (isMenuOpen.value) {
+      closeMenu();
+    } else {
+      toggleMenu();
+    }
+  }
+}
+
 onMounted(() => {
   document.addEventListener("click", onClickOutside);
   handleScroll();
   window.addEventListener("scroll", handleScroll, { passive: true });
+  updateHeaderHeight();
+  const ro = new ResizeObserver(updateHeaderHeight);
+  if (headerEl.value instanceof HTMLElement) {
+    ro.observe(headerEl.value);
+  }
+  window.addEventListener("resize", updateHeaderHeight);
+  window.addEventListener("keydown", onKeydown);
 });
 onBeforeUnmount(() => {
   document.removeEventListener("click", onClickOutside);
   window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("resize", updateHeaderHeight);
+  window.removeEventListener("keydown", onKeydown);
 });
 </script>
 
 <template>
-  <header class="site-header" :class="{ scrolled: isScrolled }">
-    <div class="container header-content">
+  <header ref="headerEl" class="site-header" :class="{ scrolled: isScrolled }">
+    <div class="header-wrapper header-content">
       <!-- Logo -->
       <NuxtLink to="/" class="logo-link">
         <h1 class="logo">Mini ASOS</h1>
@@ -73,10 +191,12 @@ onBeforeUnmount(() => {
       <!-- Menu Links -->
       <nav
         id="primary-menu"
+        ref="navEl"
         class="nav-links"
         :class="{ open: isMenuOpen }"
         aria-label="Primary"
         :aria-hidden="!isMenuOpen"
+        :tabindex="isMenuOpen ? 0 : -1"
       >
         <NuxtLink to="/" @click="closeMenu" ref="firstNavLink">Home</NuxtLink>
         <NuxtLink to="/products" @click="closeMenu">Products</NuxtLink>
@@ -108,6 +228,14 @@ onBeforeUnmount(() => {
         </div>
       </nav>
 
+      <!-- Backdrop -->
+      <div
+        v-if="isMenuOpen"
+        class="backdrop"
+        @click="closeMenu"
+        aria-hidden="true"
+      ></div>
+
       <!-- Actions -->
       <div class="actions">
         <!-- Wishlist -->
@@ -138,11 +266,13 @@ onBeforeUnmount(() => {
 
         <!-- Hamburger -->
         <button
+          ref="hamburgerEl"
           class="hamburger"
-          @click="toggleMenu"
+          @click="isMenuOpen ? closeMenu() : toggleMenu()"
+          @keydown="handleHamburgerKeydown"
           :aria-expanded="isMenuOpen"
           aria-controls="primary-menu"
-          aria-label="Toggle menu"
+          :aria-label="isMenuOpen ? 'Close menu' : 'Open menu'"
         >
           <span :class="{ open: isMenuOpen }"></span>
         </button>
@@ -164,7 +294,7 @@ onBeforeUnmount(() => {
   border-bottom: 1px solid var(--border);
   padding: 0.5rem 0;
 }
-.container {
+.header-wrapper {
   margin: 0 auto;
   padding: 0 1.5rem;
   display: flex;
@@ -249,7 +379,7 @@ onBeforeUnmount(() => {
     position: fixed;
     top: 0;
     right: 0;
-    height: 100vh;
+    height: 100dvh;
     width: 70%;
     background: var(--bg);
     flex-direction: column;
@@ -280,13 +410,12 @@ onBeforeUnmount(() => {
   }
 
   /* Hamburger Button */
-  /* Hamburger Button */
   .hamburger {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* centra verticalmente */
-    align-items: center; /* centra orizzontalmente */
-    width: 32px; /* area clic un po’ più grande */
+    justify-content: center;
+    align-items: center;
+    width: 32px;
     height: 32px;
     background: none;
     border: none;
@@ -300,8 +429,8 @@ onBeforeUnmount(() => {
   .hamburger span::after {
     content: "";
     display: block;
-    width: 20px; /* lunghezza barre */
-    height: 2px; /* più sottile */
+    width: 20px;
+    height: 2px;
     background: var(--text);
     border-radius: 2px;
     transition: transform 0.3s ease, opacity 0.2s ease, background 0.3s ease;
@@ -315,7 +444,7 @@ onBeforeUnmount(() => {
   }
 
   .hamburger span::before {
-    transform: translateY(-6px); /* distanza verticale */
+    transform: translateY(-6px);
   }
 
   .hamburger span::after {
@@ -324,13 +453,31 @@ onBeforeUnmount(() => {
 
   /* Stato aperto → icona X */
   .hamburger span.open {
-    background: transparent; /* scompare la barra centrale */
+    background: transparent;
   }
   .hamburger span.open::before {
-    transform: rotate(40deg) translate(3px, 3px);
+    transform: translateY(0) rotate(45deg);
   }
   .hamburger span.open::after {
-    transform: rotate(-40deg) translate(6px, -6px);
+    transform: translateY(0) rotate(-45deg);
+  }
+
+  /* Backdrop behind the drawer */
+  .backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(2px);
+    z-index: 998;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-links {
+      transition: none;
+    }
+    .backdrop {
+      backdrop-filter: none;
+    }
   }
 }
 </style>

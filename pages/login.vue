@@ -14,7 +14,7 @@ const onLogin = async () => {
 </script>
 
 <template>
-  <section class="wrap fade-in">
+  <section class="form-wrapper fade-in">
     <h1>Login</h1>
 
     <form v-if="!isAuthenticated" @submit.prevent="onLogin" class="form">
@@ -29,66 +29,17 @@ const onLogin = async () => {
         placeholder="Password"
         autocomplete="current-password"
       />
-      <button type="submit">Sign in</button>
+      <button class="btn-form" type="submit">Sign in</button>
     </form>
 
     <div v-else class="ok">
       <p>You are logged in.</p>
       <NuxtLink to="/products">Go to products →</NuxtLink>
-      <button @click="logout">Logout</button>
+      <button class="btn-form" @click="logout">Logout</button>
     </div>
   </section>
 </template>
 
 <style scoped>
 /* ===== Animazione tipo card ===== */
-@keyframes fadeInCard {
-  0% {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.fade-in {
-  animation: fadeInCard 0.5s ease-out forwards;
-}
-
-.wrap {
-  max-width: 360px;
-  margin: 3rem auto;
-  display: grid;
-  gap: 0.75rem;
-}
-.form {
-  display: grid;
-  gap: 0.5rem;
-}
-input {
-  padding: 0.6rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-}
-button {
-  padding: 0.6rem 0.9rem;
-  border-radius: 6px;
-  border: 1px solid #000;
-  background: #000;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.1s ease;
-}
-button:hover {
-  background: #333;
-}
-button:active {
-  transform: scale(0.98);
-}
-.ok {
-  display: grid;
-  gap: 0.75rem;
-}
 </style>

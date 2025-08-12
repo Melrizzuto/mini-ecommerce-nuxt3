@@ -233,7 +233,7 @@ const goToCheckout = () => {
 .qty button {
   border: 0;
   background: var(--primary);
-  color: #fff;
+  color: var(--text);
   padding: 0.4rem 0.6rem;
   cursor: pointer;
   font-weight: bold;
