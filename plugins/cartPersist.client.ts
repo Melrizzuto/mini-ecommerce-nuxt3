@@ -13,7 +13,7 @@ export default defineNuxtPlugin(() => {
     }
   }
 
-  // salva ad ogni modifica
+  // persist on every change
   watch(
     () => cart.$state,
     (s) => {

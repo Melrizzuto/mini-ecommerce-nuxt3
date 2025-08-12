@@ -15,10 +15,19 @@ const {
   key: () => `products:${cat.value ?? "all"}`,
   default: () => [],
 });
+
+useSeoMeta({
+  title: computed(() => (cat.value ? `Products — ${cat.value}` : "Products")),
+  description:
+    "Browse our curated list of products across categories. Fast, simple, and responsive shopping experience.",
+  ogTitle: computed(() => (cat.value ? `Products — ${cat.value}` : "Products")),
+  ogDescription:
+    "Browse our curated list of products across categories. Fast, simple, and responsive shopping experience.",
+});
 </script>
 
 <template>
-  <section class="products-page">
+  <section class="products-page" aria-live="polite">
     <h1 class="page-title">{{ cat ? `Products — ${cat}` : "Products" }}</h1>
 
     <div v-if="pending">Loading…</div>

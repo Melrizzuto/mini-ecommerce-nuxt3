@@ -12,13 +12,24 @@ const wishlist = useWishlistStore();
 
 const isMenuOpen = ref(false);
 
+const firstNavLink = ref<HTMLAnchorElement | null>(null);
+let lastFocused: HTMLElement | null = null;
+
 const toggleMenu = () => {
   isMenuOpen.value = !isMenuOpen.value;
-  document.body.style.overflow = isMenuOpen.value ? "hidden" : "";
+  if (isMenuOpen.value) {
+    lastFocused = document.activeElement as HTMLElement;
+    nextTick(() => firstNavLink.value?.focus());
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "";
+    lastFocused?.focus?.();
+  }
 };
 const closeMenu = () => {
   isMenuOpen.value = false;
   document.body.style.overflow = "";
+  lastFocused?.focus?.();
 };
 
 const onClickOutside = (e: MouseEvent) => {
@@ -48,12 +59,13 @@ onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
 
       <!-- Menu Links -->
       <nav
+        id="primary-menu"
         class="nav-links"
         :class="{ open: isMenuOpen }"
         aria-label="Primary"
         :aria-hidden="!isMenuOpen"
       >
-        <NuxtLink to="/" @click="closeMenu">Home</NuxtLink>
+        <NuxtLink to="/" @click="closeMenu" ref="firstNavLink">Home</NuxtLink>
         <NuxtLink to="/products" @click="closeMenu">Products</NuxtLink>
         <NuxtLink to="/about" @click="closeMenu">About Us</NuxtLink>
 

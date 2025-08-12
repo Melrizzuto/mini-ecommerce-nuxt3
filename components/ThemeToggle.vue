@@ -11,7 +11,7 @@ const isDark = computed({
   <label class="switch" role="switch" :aria-checked="isDark">
     <input type="checkbox" v-model="isDark" aria-label="Toggle color theme" />
     <span class="track">
-      <!-- icone SVG -->
+      <!-- icons -->
       <span class="icon sun" aria-hidden="true">
         <svg viewBox="0 0 24 24">
           <circle cx="12" cy="12" r="4" fill="currentColor" />
@@ -57,10 +57,10 @@ const isDark = computed({
 .track {
   --w: 58px;
   --h: 30px;
-  --bg: var(--surface); /* base della pill */
+  --bg: var(--surface); /* pill background */
   --bd: var(--border);
-  --fg: var(--text); /* colore icone inattive */
-  --fg-active: var(--text); /* colore icone attive */
+  --fg: var(--text); /* inactive icon color */
+  --fg-active: var(--text); /* active icon color */
   --accent: var(--btn-bd, #111); /* barra attiva */
   position: relative;
   width: var(--w);
@@ -91,7 +91,7 @@ const isDark = computed({
     box-shadow 0.25s;
 }
 
-/* icone */
+/* icons */
 .icon {
   width: 16px;
   height: 16px;

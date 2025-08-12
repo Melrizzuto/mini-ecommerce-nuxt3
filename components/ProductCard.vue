@@ -11,7 +11,6 @@ const wishlist = useWishlistStore();
 
 const added = ref(false);
 
-// stato “wished” derivato dallo store (sempre aggiornato)
 const isWished = computed(() => wishlist.isInWishlist(props.product.id));
 
 function addToCart() {
@@ -34,12 +33,17 @@ function toggleWishlist() {
         class="image-wrap"
         aria-label="Open product"
       >
-        <img
+        <NuxtImg
           class="image"
           :src="product.image"
           :alt="product.title"
           loading="lazy"
           decoding="async"
+          format="webp"
+          :width="600"
+          :height="450"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          placeholder="blur"
         />
       </NuxtLink>
 
@@ -185,7 +189,7 @@ function toggleWishlist() {
   margin-top: 0.2rem;
 }
 
-/* Button base (agganciato alle vars globali del tuo main.css) */
+/* Button base */
 .btn {
   display: inline-flex;
   align-items: center;
