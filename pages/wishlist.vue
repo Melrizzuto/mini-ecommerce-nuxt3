@@ -26,7 +26,8 @@ const wishlist = useWishlistStore();
 
 <style scoped>
 .wishlist-page {
-  padding: 3rem 2rem;
+  margin: 2rem auto;
+  padding: 3rem 1rem;
 }
 
 .wishlist-grid {
