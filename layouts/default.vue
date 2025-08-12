@@ -21,7 +21,7 @@ import Footer from "@/components/Footer.vue";
   min-height: 100dvh;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  min-width: 500px;
+  min-width: 350px;
 }
 
 /* .skip-link {
