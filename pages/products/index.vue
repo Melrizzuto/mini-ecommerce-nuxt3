@@ -42,9 +42,10 @@ useSeoMeta({
 <style scoped>
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
   gap: 3rem;
   margin-top: 2rem;
+  padding: 0 1rem;
 }
 .page-title {
   padding: 0 1rem;
