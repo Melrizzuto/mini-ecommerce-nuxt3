@@ -32,7 +32,16 @@ const goToCheckout = () => {
 
     <div v-else class="list">
       <article v-for="it in cart.items" :key="it.product.id" class="row">
-        <img class="thumb" :src="it.product.image" :alt="it.product.title" />
+        <NuxtImg
+          class="thumb"
+          :src="it.product.image"
+          :alt="it.product.title"
+          width="120"
+          height="120"
+          loading="lazy"
+          format="webp"
+          placeholder="blur"
+        />
 
         <div class="info">
           <h3 class="title">{{ it.product.title }}</h3>
@@ -258,7 +267,7 @@ const goToCheckout = () => {
   font-weight: 600;
 }
 
-/* ===== BOTTONI ===== */
+/* ===== Buttons ===== */
 .btn {
   padding: 0.6rem 0.9rem;
   border-radius: 10px;

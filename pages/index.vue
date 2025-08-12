@@ -2,6 +2,13 @@
 import ProductCard from "@/components/ProductCard.vue";
 import type { Product } from "@/server/types/Product";
 
+useSeoMeta({
+  title: "Home",
+  description: "Welcome to Mini E‑commerce. Discover products with a fast, modern Nuxt 3 experience.",
+  ogTitle: "Mini E‑commerce",
+  ogDescription: "Discover products with a fast, modern Nuxt 3 experience.",
+});
+
 const { data: products } = await useFetch<Product[]>("/api/products", {
   key: "home:featured",
   default: () => [],
@@ -104,7 +111,7 @@ const featured = computed(() => products.value.slice(0, 8));
 </template>
 
 <style scoped>
-/* ===== Animazione all'ingresso ===== */
+/* ===== Entrance animation ===== */
 @keyframes fadeInCard {
   0% {
     opacity: 0;

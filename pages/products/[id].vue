@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Product } from "@/server/types/Product";
-import { ref } from "vue";
+import { ref, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { useCartStore } from "@/stores/cart";
 
@@ -22,6 +22,49 @@ if (error.value) {
 }
 
 isLoading.value = false;
+
+watchEffect(() => {
+  if (product.value) {
+    useSeoMeta({
+      title: `${product.value.title}`,
+      description: product.value.description,
+      ogTitle: product.value.title,
+      ogDescription: product.value.description,
+      ogImage: product.value.image,
+      twitterCard: "summary_large_image",
+    });
+
+    const jsonLd = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      name: product.value.title,
+      image: [product.value.image],
+      description: product.value.description,
+      offers: {
+        "@type": "Offer",
+        priceCurrency: "EUR",
+        price: product.value.price,
+        availability: "https://schema.org/InStock",
+      },
+      aggregateRating: product.value.rating
+        ? {
+            "@type": "AggregateRating",
+            ratingValue: product.value.rating.rate,
+            reviewCount: product.value.rating.count,
+          }
+        : undefined,
+    };
+
+    useHead({
+      script: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify(jsonLd),
+        },
+      ],
+    });
+  }
+});
 
 function addToCart() {
   if (!product.value) return;
@@ -57,7 +100,7 @@ function addToCart() {
       <!-- Gallery -->
       <div class="pdp__gallery">
         <div class="pdp__image-wrapper">
-          <img
+          <NuxtImg
             class="pdp__image"
             :src="product.image"
             :alt="product.title"
@@ -65,6 +108,9 @@ function addToCart() {
             height="800"
             loading="eager"
             decoding="async"
+            format="webp"
+            sizes="(max-width: 768px) 100vw, 50vw"
+            placeholder="blur"
           />
         </div>
       </div>
@@ -130,7 +176,7 @@ function addToCart() {
 </template>
 
 <style scoped>
-/* ===== Tiny entrance animation (coerente con home) ===== */
+/* ===== Tiny entrance animation ===== */
 @keyframes fadeInCard {
   0% {
     opacity: 0;
@@ -172,7 +218,7 @@ function addToCart() {
   color: var(--text);
 }
 
-/* ===== Top micro UI (eyebrow, gradient) in linea con home ===== */
+/* ===== Top micro UI ===== */
 .eyebrow {
   display: inline-block;
   font-weight: 700;
@@ -296,7 +342,7 @@ function addToCart() {
   background: #fff;
 }
 
-/* ===== Buttons (ASOS style – coerente con home) ===== */
+/* ===== Buttons ===== */
 .btn-asos,
 .btn-asos-outline {
   text-decoration: none !important;
@@ -323,8 +369,6 @@ function addToCart() {
 .btn-asos:hover {
   background: var(--btn-bg-hover);
   color: var(--btn-fg-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 10px 28px color-mix(in oklab, var(--text) 12%, transparent);
 }
 .btn-asos.added {
   background: #16a34a;
@@ -341,8 +385,6 @@ function addToCart() {
 .btn-asos-outline:hover {
   background: var(--text);
   color: var(--bg);
-  transform: translateY(-1px);
-  box-shadow: 0 10px 28px color-mix(in oklab, var(--text) 12%, transparent);
 }
 
 /* ===== States & Skeleton ===== */
