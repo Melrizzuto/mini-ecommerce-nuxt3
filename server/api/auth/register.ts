@@ -1,3 +1,5 @@
+import bcrypt from "bcryptjs";
+
 type Body = { username: string; password: string };
 type User = { username: string; password: string; createdAt: string };
 
@@ -18,18 +20,20 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  const hashedPassword = await bcrypt.hash(body.password, 10);
   users.push({
     username: body.username,
-    password: body.password,
+    password: hashedPassword,
     createdAt: new Date().toISOString(),
   });
   await storage.setItem(key, users);
 
   // login immediato (demo)
   setCookie(event, "auth", JSON.stringify({ username: body.username }), {
-    httpOnly: false,
+    httpOnly: true,
     sameSite: "lax",
     path: "/",
+    secure: process.env.NODE_ENV === "production",
   });
 
   return { ok: true };

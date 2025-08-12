@@ -5,7 +5,8 @@ export default defineEventHandler<Session>((event) => {
   if (!raw) return { authenticated: false };
 
   try {
-    const { username } = JSON.parse(raw) as { username?: string };
+    const parsed = typeof raw === "string" ? JSON.parse(raw) : raw;
+    const username = (parsed && typeof parsed === "object" ? parsed.username : undefined) as string | undefined;
     if (!username) return { authenticated: false };
     return { authenticated: true, user: { username } };
   } catch {
