@@ -11,6 +11,7 @@ const { count: cartCount } = storeToRefs(cart);
 const wishlist = useWishlistStore();
 
 const isMenuOpen = ref(false);
+const isScrolled = ref(false);
 
 const firstNavLink = ref<HTMLAnchorElement | null>(null);
 let lastFocused: HTMLElement | null = null;
@@ -45,12 +46,24 @@ const onClickOutside = (e: MouseEvent) => {
     closeMenu();
   }
 };
-onMounted(() => document.addEventListener("click", onClickOutside));
-onBeforeUnmount(() => document.removeEventListener("click", onClickOutside));
+
+function handleScroll() {
+  isScrolled.value = window.scrollY > 4;
+}
+
+onMounted(() => {
+  document.addEventListener("click", onClickOutside);
+  handleScroll();
+  window.addEventListener("scroll", handleScroll, { passive: true });
+});
+onBeforeUnmount(() => {
+  document.removeEventListener("click", onClickOutside);
+  window.removeEventListener("scroll", handleScroll);
+});
 </script>
 
 <template>
-  <header class="site-header">
+  <header class="site-header" :class="{ scrolled: isScrolled }">
     <div class="container header-content">
       <!-- Logo -->
       <NuxtLink to="/" class="logo-link">

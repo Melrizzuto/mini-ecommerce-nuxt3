@@ -4,7 +4,7 @@ import Footer from "@/components/Footer.vue";
 </script>
 
 <template>
-  <div>
+  <div class="layout-root">
     <a href="#main-content" class="skip-link">Skip to content</a>
     <Header />
 
@@ -17,6 +17,13 @@ import Footer from "@/components/Footer.vue";
 </template>
 
 <style scoped>
+.layout-root {
+  /* Occupy full viewport height and let content fill remaining space below header */
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* header | content | footer */
+}
+
 .skip-link {
   position: absolute;
   left: -999px;
